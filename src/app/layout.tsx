@@ -1,13 +1,15 @@
+import { Toaster } from '@/components/ui/sonner';
+import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
 import { ThemeProvider } from '../provider/theme-provider';
-import { Toaster } from '@/components/ui/sonner';
+import './globals.css';
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
 });
-
+import { dark } from '@clerk/themes';
+import './globals.css';
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
@@ -15,7 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Slidely',
-  description: 'Build AI powered presentations in minutes.',
+  description:
+    'Build high-quality, AI-powered presentations in minutes. Our platform transforms your ideas, prompts, or documents into well-structured, visually engaging slides with clear content flow, smart design, and minimal effort—so you can focus on impact, not formatting.',
 };
 
 export default function RootLayout({
@@ -24,23 +27,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        suppressHydrationWarning
-        //suppressHydrationWarning is done due to clerk becuase clerk cause hydration error
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+    <ClerkProvider appearance={{ baseTheme: dark }}>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          suppressHydrationWarning
+          //suppressHydrationWarning is done due to clerk becuase clerk cause hydration error
         >
-          {' '}
-          {children}
-          <Toaster />
-        </ThemeProvider>
-      </body>
-    </html>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {' '}
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
