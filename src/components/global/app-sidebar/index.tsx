@@ -13,10 +13,12 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 
 import NavMain from './nav-main';
+import { data } from '../../../lib/constants';
+import RecentOpen from './recent-open';
 
 type AppSidebarProps = {
-  recentProjects?: Project[];
-  user?: User;
+  recentProjects: Project[];
+  user: User;
 } & React.ComponentProps<typeof Sidebar>;
 
 const AppSidebar = ({ recentProjects, user, className, ...props }: AppSidebarProps) => {
@@ -37,7 +39,9 @@ const AppSidebar = ({ recentProjects, user, className, ...props }: AppSidebarPro
       </SidebarHeader>
 
       <SidebarContent className="px-3 mt-10 gap-y-6">
-        <NavMain />
+        <NavMain items={data.navMain} />
+        
+     <RecentOpen recentProjects={recentProjects}/>
       </SidebarContent>
 
       <SidebarFooter />
