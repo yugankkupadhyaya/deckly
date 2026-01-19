@@ -20,7 +20,7 @@ const layout = async ({ children }: Props) => {
           user={checkUser.user}
           recentProjects={recentProjects.data ?? []}
         />
-        {children}
+        {/* {children} */}
       </div>
     </SidebarProvider>
   );

@@ -1,3 +1,4 @@
+
 import { Project } from '@prisma/client';
 import React from 'react';
 import {
@@ -14,29 +15,33 @@ type Props = {
 };
 
 const RecentOpen = ({ recentProjects }: Props) => {
-  return (
+  return recentProjects.length > 0 ? (
     <SidebarGroup>
       <SidebarGroupLabel>Recently Opened</SidebarGroupLabel>
 
       <SidebarMenu>
-        <SidebarMenuItem>
-          <SidebarMenuButton
-            asChild
-            tooltip="testing"
-            className="hover:"
-          >
-            <Button
-              variant="link"
-              className="w-full justify-start"
-              onClick={() => {}}
+        {recentProjects.map((item) => (
+          <SidebarMenuItem key={item.id}>
+            <SidebarMenuButton
+              asChild
+              tooltip={item.title}
+              className="hover:bg-muted"
             >
-              <span>testing</span>
-            </Button>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+              <Button
+                variant="link"
+                className="w-full justify-start"
+                onClick={() => {}}
+              >
+                <span>testing</span>
+              </Button>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
       </SidebarMenu>
     </SidebarGroup>
-  );
+  ) : <SidebarGroup>
+      <SidebarGroupLabel>No recent projects</SidebarGroupLabel>
+  </SidebarGroup>;
 };
 
 export default RecentOpen;
