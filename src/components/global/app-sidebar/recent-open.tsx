@@ -1,4 +1,3 @@
-
 import { Project } from '@prisma/client';
 import React from 'react';
 import {
@@ -9,12 +8,29 @@ import {
   SidebarMenuItem,
 } from '../../ui/sidebar';
 import { Button } from '../../ui/button';
+import { JsonValue } from '@prisma/client/runtime/library';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   recentProjects: Project[];
 };
 
 const RecentOpen = ({ recentProjects }: Props) => {
+  const router = useRouter();
+
+  const handleClick = (projectId: string, slides: JsonValue) => {
+    if (!projectId || !slides) {
+      toast.error('Project not found.', {
+        description: 'Please try again',
+      });
+      return;
+    }
+
+    setSlides(JSON.parse(JSON.stringify(slides)));
+    router.push(`/presentation/${projectId}`);
+  };
+
   return recentProjects.length > 0 ? (
     <SidebarGroup>
       <SidebarGroupLabel>Recently Opened</SidebarGroupLabel>
@@ -22,15 +38,13 @@ const RecentOpen = ({ recentProjects }: Props) => {
       <SidebarMenu>
         {recentProjects.map((item) => (
           <SidebarMenuItem key={item.id}>
-            <SidebarMenuButton
-              asChild
-              tooltip={item.title}
-              className="hover:bg-muted"
-            >
+            <SidebarMenuButton asChild tooltip={item.title} className="hover:bg-muted">
               <Button
                 variant="link"
                 className="w-full justify-start"
-                onClick={() => {}}
+                onClick={() => {
+                  handleClick(item.id, item.slides);
+                }}
               >
                 <span>testing</span>
               </Button>
@@ -39,9 +53,11 @@ const RecentOpen = ({ recentProjects }: Props) => {
         ))}
       </SidebarMenu>
     </SidebarGroup>
-  ) : <SidebarGroup>
+  ) : (
+    <SidebarGroup>
       <SidebarGroupLabel>No recent projects</SidebarGroupLabel>
-  </SidebarGroup>;
+    </SidebarGroup>
+  );
 };
 
 export default RecentOpen;
