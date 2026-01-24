@@ -1,3 +1,4 @@
+import { Variants } from 'framer-motion';
 import { Home, LayoutTemplateIcon, Settings, Trash } from 'lucide-react';
 
 interface NavItem {
@@ -5,8 +6,6 @@ interface NavItem {
   url: string;
   icon: React.ComponentType;
 }
-
-// adjust import path if needed
 
 export const data: {
   user: {
@@ -45,12 +44,27 @@ export const data: {
   ],
 };
 
-export const containerVariants = {
+export const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
       staggerChildren: 0.1,
+    },
+  },
+};
+
+export const itemVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'spring',
+      stiffness: 100,
     },
   },
 };

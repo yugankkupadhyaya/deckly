@@ -7,6 +7,14 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 const ThemeSwitcher = () => {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // ⛔ Prevent hydration mismatch
+  if (!mounted) return null;
 
   return (
     <ToggleGroup
