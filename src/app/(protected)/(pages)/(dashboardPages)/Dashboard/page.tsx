@@ -19,9 +19,13 @@ const DashboardPage = async () => {
     variantId: null,
   } as any; // Temporary type assertion
 
-  const projects = allProject.status === 200 && allProject.data && Array.isArray(allProject.data) && allProject.data.length > 0
-    ? allProject.data
-    : [testProject]; // Use test project if no real projects
+  const projects =
+    allProject.status === 200 &&
+    allProject.data &&
+    Array.isArray(allProject.data) &&
+    allProject.data.length > 0
+      ? allProject.data
+      : [testProject]; // Use test project if no real projects
 
   return (
     <div className="flex flex-col gap-6">
