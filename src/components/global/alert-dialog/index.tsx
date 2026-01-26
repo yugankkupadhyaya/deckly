@@ -15,7 +15,7 @@ import { Button } from '../../ui/button';
 type Props = {
   children: React.ReactNode;
   className?: string;
-  description: ReactNode;
+  description: ReactNode
   loading?: boolean;
   onclick?: () => void;
   open: boolean;

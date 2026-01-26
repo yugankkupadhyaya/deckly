@@ -4,6 +4,7 @@ import { Project } from '@prisma/client';
 import { motion } from 'framer-motion';
 import { containerVariants } from '../../../lib/constants';
 import ProjectCard from '../project-card';
+import NotFound from '../not-found';
 
 type Props = {
   projects: Project[];
@@ -11,10 +12,11 @@ type Props = {
 
 const Projects = ({ projects }: Props) => {
   if (!projects || projects.length === 0) {
-    return null;
+    return <NotFound />;
   }
 
   console.log('Projects component rendering with:', projects.length, 'projects');
+  console.log('Projects data:', projects);
 
   return (
     <motion.div
@@ -32,10 +34,6 @@ const Projects = ({ projects }: Props) => {
           isDeleted={project?.isDeleted}
           slideData={project?.slides}
           themeName={project.themeName}
-          src={
-            project.thumbnail ||
-            'https://unsplash.com/photos/a-pile-of-multicolored-confetti-sitting-on-top-of-a-white-table-BSPG-wXR7zM'
-          }
         />
       ))}
     </motion.div>

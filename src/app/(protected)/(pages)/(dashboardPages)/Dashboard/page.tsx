@@ -4,28 +4,13 @@ import Projects from '../../../../../components/global/projects';
 const DashboardPage = async () => {
   const allProject = await getAllProjects();
 
-  // TEMPORARY: Add test project for debugging
-  const testProject = {
-    id: 'test-1',
-    title: 'Test Project',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    thumbnail: null,
-    isDeleted: false,
-    isSellable: false,
-    slides: null,
-    outlines: [],
-    themeName: 'Default',
-    variantId: null,
-  } as any; // Temporary type assertion
-
   const projects =
     allProject.status === 200 &&
     allProject.data &&
     Array.isArray(allProject.data) &&
     allProject.data.length > 0
       ? allProject.data
-      : [testProject]; // Use test project if no real projects
+      : [];
 
   return (
     <div className="flex flex-col gap-6">
