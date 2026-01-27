@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -122,4 +122,21 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.bg-vivid-gradient {
+  @apply bg-gradient-to-br from-indigo-500 via-purple-500 to-fuchsia-500;
+}
+
+.bg-vivid-border {
+  @apply bg-gradient-to-br from-zinc-800 via-zinc-700 to-zinc-800;
+}
+.text-vivid {
+  @apply bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent;
+}
+
+.vivid-glow {
+  box-shadow:
+    0 0 0 1px oklch(1 0 0 / 6%),
+    0 0 40px oklch(0.65 0.2 290 / 12%);
 }

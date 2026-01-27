@@ -14,7 +14,7 @@ model User {
   clerkId String @unique
   email         String   @unique
   profileImage  String?
-  subscription  Boolean  @default(false)
+ subscription Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

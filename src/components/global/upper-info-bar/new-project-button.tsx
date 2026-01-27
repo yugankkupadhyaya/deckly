@@ -10,14 +10,14 @@ type Props = {
 };
 
 const NewProjectButton = ({ user }: Props) => {
-  // push handle needs complettion 
+  // push handle needs completion
   const router = useRouter();
   return (
     <Button
       size={'lg'}
       className="rounded-lg font-semibold"
-      disabled={!user.subscription}
-      // onClick={}
+      // disabled={!user.subscription}
+      onClick={() => router.push('/create-page')}
     >
       <Plus></Plus>
       New Project
