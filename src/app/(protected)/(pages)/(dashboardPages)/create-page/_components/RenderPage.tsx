@@ -16,11 +16,13 @@ const RenderPage = (props: Props) => {
     switch (page) {
       case 'create':
         return (
-          <CreatePage
-            onSelectOption={(option: Page) => {
-              setPage(option);
-            }}
-          />
+          <>
+            <CreatePage
+              onSelectOption={(option) => {
+                setPage(option as Page);
+              }}
+            />
+          </>
         );
 
       case 'create-scratch':

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, devtools } from 'zustand/middleware';
+
 export type Page = 'create' | 'creative-ai' | 'create-scratch';
 
 type PromptStore = {
@@ -15,6 +16,7 @@ const usePromptStore = create<PromptStore>()(
         setPage: (page: Page) => {
           set({ page });
         },
+
       }),
       { name: 'prompts' }
     )

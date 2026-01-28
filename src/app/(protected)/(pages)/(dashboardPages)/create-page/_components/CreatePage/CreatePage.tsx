@@ -11,8 +11,12 @@ type Props = {
 
 const CreatePage = ({ onSelectOption }: Props) => {
   return (
-    <motion.div initial="hidden" animate="visible" className="space-y-10">
-      {/* Header */}
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="space-y-10"
+    >
       <motion.div variants={itemVariants} className="text-center space-y-2">
         <h1 className="text-4xl font-bold text-primary">How would you like to get started?</h1>
         <p className="text-secondary">Choose your preferred method to begin</p>
@@ -55,9 +59,7 @@ const CreatePage = ({ onSelectOption }: Props) => {
                     {option.highlightedText}
                   </p>
                 </div>
-
-                <p className="text-secondary text-sm">{option.description}</p>
-              </div>
+</div>
 
               {/* Action */}
               <motion.div
@@ -66,9 +68,11 @@ const CreatePage = ({ onSelectOption }: Props) => {
                 whileTap={{ scale: 0.95 }}
               >
                 <Button
+               
+                
                   variant={option.highlight ? 'default' : 'outline'}
                   size="sm"
-                  className="rounded-xl font-bold"
+                  className="rounded-xl font-bold cursor-pointer"
                   onClick={() => onSelectOption(option.type)}
                 >
                   {option.highlight ? 'Generate' : 'Continue'}
