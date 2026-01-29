@@ -67,3 +67,9 @@ export type ContentType =
   | 'todoList'
   | 'customButton'
   | 'tableOfContents';
+
+export interface OutlineCard {
+  title: string;
+  id: string;
+  order: string;
+}

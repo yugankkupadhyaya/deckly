@@ -4,12 +4,17 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { containerVariants, itemVariants, CreatePageCard } from '@/lib/constants';
 import { cn } from '@/lib/utils';
+import usePromptStore from '../../../../../../../store/usePromptStore';
+import RecentPrompts from '../GenerateAi/RecentPrompts';
+import { useEffect } from 'react';
 
 type Props = {
   onSelectOption: (option: string) => void;
 };
 
 const CreatePage = ({ onSelectOption }: Props) => {
+  const { prompts, setPage } = usePromptStore();
+
   return (
     <motion.div
       variants={containerVariants}
@@ -59,7 +64,7 @@ const CreatePage = ({ onSelectOption }: Props) => {
                     {option.highlightedText}
                   </p>
                 </div>
-</div>
+              </div>
 
               {/* Action */}
               <motion.div
@@ -68,8 +73,6 @@ const CreatePage = ({ onSelectOption }: Props) => {
                 whileTap={{ scale: 0.95 }}
               >
                 <Button
-               
-                
                   variant={option.highlight ? 'default' : 'outline'}
                   size="sm"
                   className="rounded-xl font-bold cursor-pointer"
@@ -82,6 +85,7 @@ const CreatePage = ({ onSelectOption }: Props) => {
           </motion.div>
         ))}
       </motion.div>
+      {prompts.length > 0 && <RecentPrompts />}
     </motion.div>
   );
 };
