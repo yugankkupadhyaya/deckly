@@ -1,14 +1,29 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, Variants } from 'framer-motion';
 import { containerVariants, itemVariants } from '../../../../../../../lib/constants';
 import { Button } from '../../../../../../../components/ui/button';
-import { ChevronLeft, Sparkle, SparkleIcon } from 'lucide-react';
+import {
+  ChevronLeft,
+  Loader2,
+  RotateCw,
+  RotateCwSquareIcon,
+  Sparkle,
+  SparkleIcon,
+} from 'lucide-react';
 import { isKeyObject } from 'util/types';
 import { Input } from '../../../../../../../components/ui/input';
 import useCreativeAIStore from './../../../../../../../store/useCreativeAiStore';
-import { currentUser } from '@clerk/nextjs/server';
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import CardList from '../Common/CardList';
 
 type Props = {
   onBack: () => void;
@@ -16,11 +31,35 @@ type Props = {
 
 const CreativeAi = ({ onBack }: Props) => {
   const router = useRouter();
-  const { CurrentAiPrompt, setCurrentAIPrompt } = useCreativeAIStore();
+  const {
+    CurrentAiPrompt,
+    setCurrentAIPrompt,
+    outlines,
+    resetOutlines,
+    addOutline,
+    addMultipleOutlines,
+  } = useCreativeAIStore();
+
+  const [noOfCards, setNoOfCards] = useState(0);
+  const [editingCards, setEditingCards] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+
+  const [editText, setEditText] = useState('');
 
   const handleBack = () => {
     onBack();
   };
+
+  const resetCards = () => {
+    setEditingCards(null);
+    setSelectedCard(null);
+    setEditText('');
+    resetOutlines();
+    setCurrentAIPrompt('');
+  };
+
+  //WIP:const generateOutline=()=>{}
 
   return (
     <motion.div
@@ -40,39 +79,35 @@ const CreativeAi = ({ onBack }: Props) => {
         <p className="text-secondary">What would you like to create today?</p>
       </motion.div>
 
-      <motion.div variants={itemVariants} className="flex justify-center w-full">
-        <div
-          className="
-      flex
-      items-center
-      w-full
-      sm:w-[70%]
-      max-w-3xl
-      h-11
-      sm:h-12
-      rounded-full
-      bg-primary-foreground
-      border
-      border-white/10
-      px-5
-      backdrop-blur
-      transition-colors
-      focus-within:border-white/20
-    "
-        >
-          <SparkleIcon />
+      <motion.div
+        variants={itemVariants}
+        className="
+    mx-auto
+    flex items-center
+    w-full sm:w-[70%] max-w-3xl
+    h-11 sm:h-12
+    rounded-full
+    bg-primary-foreground
+    border border-white/10
+    px-4 gap-3
+    backdrop-blur
+    transition-colors
+    focus-within:border-white/20
+  "
+      >
+        {/* LEFT: Icon + Input */}
+        <div className="flex items-center flex-1">
+          <SparkleIcon className="h-4 w-4 text-muted-foreground" />
 
-          {/* Input */}
           <input
             type="text"
-            placeholder="Enter Prompt and add to the cards.."
+            placeholder="Enter prompt and add to the cards..."
             className="
         w-full
         bg-transparent
         border-none
         outline-none
-        text-sm
-        sm:text-base
+        text-sm sm:text-base
         text-foreground
         placeholder:text-muted-foreground
         pl-3
@@ -81,11 +116,74 @@ const CreativeAi = ({ onBack }: Props) => {
             onChange={(e) => setCurrentAIPrompt(e.target.value)}
           />
         </div>
-<div className='flex items-center gap-3'>
-  <select/>
-</div>
 
+        <Select
+          value={noOfCards.toString()}
+          onValueChange={(value) => setNoOfCards(parseInt(value))}
+        >
+          <SelectTrigger
+            className="
+        h-8
+        rounded-full
+        px-3
+        text-sm
+        font-semibold
+        bg-background
+        border border-white/10
+        shadow-none
+        focus:ring-0
+      "
+          >
+            <SelectValue placeholder="Cards" />
+          </SelectTrigger>
+
+          <SelectContent>
+            {outlines.length === 0 ? (
+              <SelectItem value="0">No Cards</SelectItem>
+            ) : (
+              Array.from({ length: outlines.length }, (_, i) => i + 1).map((num) => (
+                <SelectItem key={num} value={num.toString()}>
+                  {num} {num === 1 ? 'Card' : 'Cards'}
+                </SelectItem>
+              ))
+            )}
+          </SelectContent>
+        </Select>
+        <Button variant={'ghost'} size={'icon'} onClick={resetCards} aria-label="Reset Cards">
+          <RotateCw className="h-4 w-4" />
+        </Button>
       </motion.div>
+      <div className="w-full flex justify-center items-center">
+        <Button
+          className="font-medium text-lg flex gap-2 items-center"
+          // onClick={generateOutline}
+          disabled={isGenerating}
+        >
+          {isGenerating ? (
+            <Loader2 className="animate-spin">Generating...</Loader2>
+          ) : (
+            'Generate Outline'
+          )}
+        </Button>
+      </div>
+
+      <CardList
+        outlines={outlines}
+        addOutline={addOutline}
+        addMultipleOutlines={addMultipleOutlines}
+        editingCard={editingCards}
+        selectedCard={selectedCard}
+        editText={editText}
+        onEditChange={setEditText}
+        onCardSelect={setSelectedCard}
+        onCardDoubleClick={(id: any, title: string) => {
+          setEditingCards(id);
+          setEditText(title);
+        }}
+        setEditText={setEditText}
+        setEditingCard={setEditingCards}
+        setSelectedCard={setSelectedCard}
+      />
     </motion.div>
   );
 };
