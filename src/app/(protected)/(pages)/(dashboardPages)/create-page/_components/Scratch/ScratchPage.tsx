@@ -1,6 +1,6 @@
 'use client';
-import { v4 as uuidv4, v4 } from 'uuid';
 
+import { v4 as v4 } from 'uuid';
 import { motion } from 'framer-motion';
 import { containerVariants, itemVariants } from '../../../../../../../lib/constants';
 import { Button } from '../../../../../../../components/ui/button';
@@ -17,8 +17,6 @@ import { useState } from 'react';
 import { Input } from '../../../../../../../components/ui/input';
 import CardList from '../Common/CardList';
 import { OutlineCard } from '../../../../../../../lib/types';
-import { totalmem } from 'os';
-import { toast } from 'sonner';
 import { showErrorToast, showSuccessToast } from '../../../../../../../lib/toast';
 import { createProject } from '../../../../../../../actions/project';
 import { useSlideStore } from '../../../../../../../store/useSlideStore';
@@ -30,9 +28,9 @@ type Props = {
 
 const ScratchPage = ({ onBack }: Props) => {
   const router = useRouter();
-
   const { setProject } = useSlideStore();
   const { resetOutlines, outlines, addMultipleOutlines, addOutlines } = useScratchStore();
+
   const [selectedCount, setSelectedCount] = useState('0');
   const [editText, setEditText] = useState('');
   const [editingCard, setEditingCard] = useState<string | null>(null);
@@ -60,74 +58,124 @@ const ScratchPage = ({ onBack }: Props) => {
 
   const handleGenerate = async () => {
     if (outlines.length === 0) {
-      showErrorToast('Please add at least one card to generate slides ');
+      showErrorToast('Please add at least one card to generate slides');
       return;
     }
-    const res = await createProject(outlines?.[0].title, outlines);
-    if (res.status != 200) {
-      showErrorToast('Failed to create this  project');
-      return;
-    }
-    if (res.data) {
-      setProject(res.data);
-      resetOutlines();
-      showSuccessToast('Project created successfully');
-      router.push(`/presentation/${res.data.id}/select-theme`);
-    } else {
+
+    const res = await createProject(outlines[0].title, outlines);
+    if (res.status !== 200 || !res.data) {
       showErrorToast('Failed to create project');
+      return;
     }
+
+    setProject(res.data);
+    resetOutlines();
+    showSuccessToast('Project created successfully');
+    router.push(`/presentation/${res.data.id}/select-theme`);
   };
 
   return (
     <motion.div
-      className="space-y-6 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
+      className="
+        w-full max-w-4xl mx-auto
+        px-4 sm:px-6 lg:px-8
+        space-y-10
+      "
     >
-      <Button onClick={handleBack}>
-        <ChevronLeft />
-      </Button>
+      {/* Header */}
+      <div className="flex items-center gap-4">
+        <Button onClick={handleBack} variant="ghost" size="icon" className="rounded-full">
+          <ChevronLeft />
+        </Button>
 
-      <h1 className="text-2xl sm:text-3xl font-bold text-primary">Prompt</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Prompt</h1>
+      </div>
 
-      <motion.div className="bg-primary/10 rounded-xl p-4" variants={itemVariants}>
-        <div className="flex flex-col sm:flex-row justify-between gap-3 items-center">
-          <Input
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-            placeholder="Enter Prompt and add cards.."
-            className="text-base sm:text-xl
-            border-0 focus-visible:ring-0 shadow-none p-0 bg-transparent grow"
-          />
+      {/* Prompt Bar */}
+      <motion.div
+        variants={itemVariants}
+        className="
+          mx-auto
+          w-full
+          max-w-3xl
+          flex items-center
+          gap-4
+          h-14
+          px-5
+          rounded-full
 
-          <div className="flex items-center gap-3">
-            <Select value={selectedCount} onValueChange={setSelectedCount}>
-              <SelectTrigger className="w-fit gap-2 font-semibold shadow-xl">
-                <SelectValue placeholder="Select number of cards" />
-              </SelectTrigger>
+          bg-muted
+          border border-border
+          shadow-md
 
-              <SelectContent className="w-fit">
-                {outlines.length === 0 ? (
-                  <SelectItem value="0" className="font-semibold">
-                    No cards
-                  </SelectItem>
-                ) : (
-                  Array.from({ length: outlines.length }, (_, idx) => idx + 1).map((num) => (
-                    <SelectItem key={num} value={num.toString()} className="font-semibold">
-                      {num} {num === 1 ? 'Card' : 'Cards'}
-                    </SelectItem>
-                  ))
-                )}
-              </SelectContent>
-            </Select>
-            <Button variant={'ghost'} onClick={resetCards} size={'icon'} aria-label="Reset Cards">
-              <RotateCcw className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+          dark:bg-neutral-900/80
+          dark:border-white/15
+
+          transition-all
+          focus-within:ring-1
+          focus-within:ring-ring
+        "
+      >
+        <Input
+          value={editText}
+          onChange={(e) => setEditText(e.target.value)}
+          placeholder="Enter Prompt and add cards.."
+          className="
+            flex-1
+            bg-transparent
+            border-none
+            outline-none
+            focus-visible:ring-0
+            text-[15px]
+            text-foreground
+            placeholder:text-foreground/50
+          "
+        />
+
+        <Select value={selectedCount} onValueChange={setSelectedCount}>
+          <SelectTrigger
+            className="
+              h-9
+              px-3
+              rounded-full
+              bg-background
+              border border-border
+              text-sm
+              text-foreground
+              shadow-sm
+            "
+          >
+            <SelectValue />
+          </SelectTrigger>
+
+          <SelectContent>
+            {outlines.length === 0 ? (
+              <SelectItem value="0">No cards</SelectItem>
+            ) : (
+              Array.from({ length: outlines.length }, (_, i) => i + 1).map((num) => (
+                <SelectItem key={num} value={num.toString()}>
+                  {num} {num === 1 ? 'Card' : 'Cards'}
+                </SelectItem>
+              ))
+            )}
+          </SelectContent>
+        </Select>
+
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={resetCards}
+          className="rounded-full"
+          aria-label="Reset Cards"
+        >
+          <RotateCcw className="h-4 w-4" />
+        </Button>
       </motion.div>
 
+      {/* Cards */}
       <CardList
         outlines={outlines}
         addOutline={addOutlines}
@@ -145,12 +193,26 @@ const ScratchPage = ({ onBack }: Props) => {
         setEditingCard={setEditingCard}
         setSelectedCard={setSelectedCard}
       />
-      <Button onClick={handleAddCard} variant={'secondary'} className="w-full bg-primary-10">
-        Add Card
-      </Button>
 
-      {outlines?.length > 0 && (
-        <Button className="w-full" onClick={handleGenerate}>
+      {/* Add Card */}
+      <div className="flex justify-center">
+        <Button
+          onClick={handleAddCard}
+          variant="secondary"
+          className="
+            h-11
+            px-10
+            rounded-full
+            font-medium
+          "
+        >
+          Add Card
+        </Button>
+      </div>
+
+      {/* Generate */}
+      {outlines.length > 0 && (
+        <Button onClick={handleGenerate} className="w-full h-12 text-base">
           Generate PPT
         </Button>
       )}
