@@ -1,10 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { OutlineCard } from '../../../../../../../lib/types';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import Card from './Card';
+import { Car } from 'lucide-react';
+import AddCardButton from './addCardButton';
 
 type Props = {
   outlines: OutlineCard[];
@@ -37,6 +39,8 @@ const CardList = ({
 }: Props) => {
   const [draggedItem, setDraggedItem] = useState<OutlineCard | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+
+  const dragOffsetY = useRef<number>(0);
 
   //function for deciding the drop position
   const onDragOver = (e: React.DragEvent, index: number) => {
@@ -83,6 +87,77 @@ const CardList = ({
     setDragOverIndex(null);
   };
 
+  const onCardUpdate = (id: string, newTitle: string) => {
+    addMultipleOutlines(
+      outlines.map((card) => (card.id === id ? { ...card, title: newTitle } : card))
+    );
+
+    setEditingCard(null);
+    setSelectedCard(null);
+    setEditText('');
+  };
+
+  const onCardDelete = (id: string) => {
+    addMultipleOutlines(
+      outlines
+        .filter((card) => card.id !== id)
+        .map((card, index) => ({
+          ...card,
+          order: index + 1,
+        }))
+    );
+  };
+
+  //ondragstart(e, card)
+  // Marks which card is being dragged
+  // Sets drag effect
+  // Stores cursor offset
+  const ondragstart = (e: React.DragEvent, card: OutlineCard) => {
+    setDraggedItem(card);
+    e.dataTransfer.effectAllowed = 'move';
+
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    dragOffsetY.current = e.clientY - rect.top;
+    const draggedEl = e.currentTarget.cloneNode(true) as HTMLElement;
+
+    draggedEl.style.position = 'absolute';
+    draggedEl.style.top = '-1000px';
+    draggedEl.style.width = `${(e.currentTarget as HTMLElement).offsetWidth}px`;
+    draggedEl.style.opacity = '0.8';
+    document.body.appendChild(draggedEl);
+
+    e.dataTransfer.setDragImage(draggedEl, 0, dragOffsetY.current);
+
+    setTimeout(() => {
+      setDragOverIndex(outlines.findIndex((c) => c.id === card.id));
+      document.body.removeChild(draggedEl);
+    }, 0);
+  };
+
+  const ondragEnd = () => {
+    setDraggedItem(null);
+    setDragOverIndex(null);
+  };
+
+  const getDragOverStyles = (cardIndex: number) => {
+    if (dragOverIndex == null || draggedItem == null) return {};
+    if (cardIndex === dragOverIndex) {
+      return {
+        borderTop: '2px solid #000',
+        marginTop: '0.5rem',
+        transition: 'margin 0.2s cubic-bezier(0.25,0.1,0.25,1)',
+      };
+    } else if (cardIndex === dragOverIndex - 1) {
+      return {
+        borderTop: '2px solid #000',
+        marginTop: '0.5rem',
+        transition: 'margin 0.2s cubic-bezier(0.25,0.1,0.25,1)',
+      };
+    } else return {};
+  };
+
+  const onAddCard = () => {};
+
   return (
     <motion.div
       className="space-y-2 -my-2"
@@ -102,9 +177,35 @@ const CardList = ({
       }}
     >
       <AnimatePresence>
-        {outlines.map((card, idx) => (
+        {outlines.map((card, index) => (
           <React.Fragment key={card.id}>
-            <Card />
+            <Card
+              onDragOver={(e) => onDragOver(e, index)}
+              card={card}
+              isEditing={editingCard === card.id}
+              isSelected={selectedCard === card.id}
+              editText={editText}
+              onEditChange={onEditChange}
+              onEditBlur={() => onCardUpdate(card.id, editText)}
+              onEditKeyDown={(e) => {
+                if (e.key === 'ENTER') {
+                  onCardUpdate(card.id, editText);
+                }
+              }}
+              onCardClick={() => onCardSelect(card.id)}
+              onCardDoubleClick={() => onCardDoubleClick(card.id, card.title)}
+              onDeleteClick={() => onCardDelete(card.id)}
+              dragHandlers={{
+                onDragStart: (e) => {
+                  ondragstart(e, card);
+                },
+                onDragEnd: ondragEnd,
+              }}
+              dragOverStyles={getDragOverStyles(index)}
+            />
+            <AddCardButton
+            // onAddCard={() => onAddCard(index)}
+            />
           </React.Fragment>
         ))}
       </AnimatePresence>
