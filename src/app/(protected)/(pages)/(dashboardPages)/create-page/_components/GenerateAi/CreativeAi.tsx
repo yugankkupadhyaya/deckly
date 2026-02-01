@@ -24,6 +24,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import CardList from '../Common/CardList';
+import usePromptStore from '../../../../../../../store/usePromptStore';
+import RecentPrompts from './RecentPrompts';
+import { toast } from 'sonner';
+import { currentUser } from '@clerk/nextjs/server';
+import { generateCreativePrompt } from '../../../../../../../actions/chatgpt';
 
 type Props = {
   onBack: () => void;
@@ -31,6 +36,8 @@ type Props = {
 
 const CreativeAi = ({ onBack }: Props) => {
   const router = useRouter();
+
+  const { prompts, addPrompt } = usePromptStore();
   const {
     CurrentAiPrompt,
     setCurrentAIPrompt,
@@ -59,7 +66,18 @@ const CreativeAi = ({ onBack }: Props) => {
     setCurrentAIPrompt('');
   };
 
-  //WIP:const generateOutline=()=>{}
+  const generateOutline = async () => {
+    if (CurrentAiPrompt == '') {
+      toast.error('Error', { description: 'Please enter a prompt' });
+      return;
+    }
+    setIsGenerating(true);
+    const res = await generateCreativePrompt(CurrentAiPrompt);
+
+    //wip:use open ai and complete this function
+  };
+
+  const handleGenerate = () => {};
 
   return (
     <motion.div
@@ -156,7 +174,7 @@ const CreativeAi = ({ onBack }: Props) => {
       <div className="w-full flex justify-center items-center">
         <Button
           className="font-medium text-lg flex gap-2 items-center"
-          // onClick={generateOutline}
+          onClick={generateOutline}
           disabled={isGenerating}
         >
           {isGenerating ? (
@@ -184,6 +202,21 @@ const CreativeAi = ({ onBack }: Props) => {
         setEditingCard={setEditingCards}
         setSelectedCard={setSelectedCard}
       />
+
+      {outlines.length > 0 && (
+        <Button className="w-full" onClick={handleGenerate} disabled={isGenerating}>
+          {isGenerating ? (
+            <>
+              <Loader2 className="animate-spin" />
+              Generating..
+            </>
+          ) : (
+            'Generate'
+          )}
+        </Button>
+      )}
+
+      {prompts.length > 0 && <RecentPrompts />}
     </motion.div>
   );
 };

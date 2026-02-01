@@ -7,6 +7,7 @@ import usePromptStore, { Page } from '../../../../../../store/usePromptStore';
 import CreatePage from './CreatePage/CreatePage';
 import { redirect } from 'next/dist/server/api-utils';
 import CreativeAi from './GenerateAi/CreativeAi';
+import ScratchPage from './Scratch/ScratchPage';
 
 type Props = {};
 
@@ -37,7 +38,7 @@ const RenderPage = (props: Props) => {
         );
 
       case 'create-scratch':
-        return null;
+        return <ScratchPage onBack={handleBack} />;
 
       case 'creative-ai':
         return <CreativeAi onBack={handleBack} />;

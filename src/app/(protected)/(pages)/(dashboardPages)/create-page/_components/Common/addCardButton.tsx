@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Button } from '../../../../../../../components/ui/button';
+import { Plus } from 'lucide-react';
 
 type Props = {
   onAddCard: () => void;
@@ -30,7 +32,21 @@ const AddCardButton = ({ onAddCard }: Props) => {
             transition={{ duration: 0.2, delay: 0.1 }}
             className="absolute inset-0 flex items-center justify-center"
           >
-            <div className="w-40%"></div>
+            <div
+              className="w-[40%] h-px bg-primary
+            "
+            >
+              <Button
+                variant={'outline'}
+                size={'sm'}
+                className="rounded-full h-8 w-8 bg-primary hover:bg-primary"
+                onClick={onAddCard}
+                aria-label="Add new card"
+              >
+                <Plus className="h-4 w-4 text-black" />
+              </Button>
+              <div className="w-[40%] h-px bg-primary"></div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
