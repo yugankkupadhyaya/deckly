@@ -28,7 +28,7 @@ import usePromptStore from '../../../../../../../store/usePromptStore';
 import RecentPrompts from './RecentPrompts';
 import { toast } from 'sonner';
 import { currentUser } from '@clerk/nextjs/server';
-import { generateCreativePrompt } from '../../../../../../../actions/chatgpt';
+import { generateCreativePrompt } from '../../../../../../../actions/ai.actions';
 
 type Props = {
   onBack: () => void;
