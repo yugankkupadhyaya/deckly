@@ -1,9 +1,11 @@
-"use server";
-import OpenAi from "openai";
+'use server';
+import OpenAi from 'openai';
+import { OpenRouter } from '@openrouter/sdk';
+import { statsBuffer } from 'framer-motion';
+import { error } from 'console';
+
 export const generateCreativePrompt = async (userPrompt: string) => {
-  const openai = new OpenAi({
-    apiKey: process.env.OPEN_ROUTER_API_KEY,
-  });
+  const openrouter = new OpenRouter({ apiKey: process.env.OPEN_ROUTER_API_KEY });
 
   const finalPrompt = `
 Create a coherent and relevant outline for the following
@@ -28,5 +30,35 @@ Return the output in the following JSON format:
 Ensure that the JSON is valid and properly formatted. Do not include any other text or explanations  outside the JSON.
 `;
   try {
-  } catch (error) {}
+    const completion = await openrouter.chat.send({
+      model: 'openai/gpt-oss-120b:free',
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a helpful AI that generates outlines for presentations.',
+        },
+        {
+          role: 'user',
+          content: finalPrompt,
+        },
+      ],
+      maxTokens: 1000,
+      temperature: 0.0,
+    });
+
+    const responseContent = completion.choices[0].message?.content;
+    if (responseContent && typeof responseContent === 'string') {
+      try {
+        const jsonResponse = JSON.parse(responseContent);
+        return { status: 200, data: jsonResponse };
+      } catch (error) {
+        console.error('Invalid JSON received ', responseContent, error);
+        return { status: 500, error: 'Invalid JSON received from AI' };
+      }
+    }
+    return { status: 400, error: 'No content generated' };
+  } catch (error) {
+    console.error('error', error);
+    return { status: 500, error: 'iNTERNAL SERVER ERROR' };
+  }
 };

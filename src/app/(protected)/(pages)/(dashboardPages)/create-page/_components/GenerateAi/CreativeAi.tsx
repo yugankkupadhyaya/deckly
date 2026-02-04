@@ -29,6 +29,9 @@ import RecentPrompts from './RecentPrompts';
 import { toast } from 'sonner';
 import { currentUser } from '@clerk/nextjs/server';
 import { generateCreativePrompt } from '../../../../../../../actions/ai.actions';
+import { OutlineCard } from '../../../../../../../lib/types';
+import { v4 } from 'uuid';
+import { showErrorToast, showSuccessToast } from '../../../../../../../lib/toast';
 
 type Props = {
   onBack: () => void;
@@ -73,8 +76,23 @@ const CreativeAi = ({ onBack }: Props) => {
     }
     setIsGenerating(true);
     const res = await generateCreativePrompt(CurrentAiPrompt);
-
-    //wip:use open ai and complete this function
+    if (res.status === 200 && res?.data?.outlines) {
+      const cardsData: OutlineCard[] = [];
+      res.data.outlines.map((outline: string, idx: number) => {
+        const newCard = {
+          id: v4(),
+          title: outline,
+          order: idx + 1,
+        };
+        cardsData.push(newCard);
+      });
+      addMultipleOutlines(cardsData);
+      setNoOfCards(cardsData.length);
+      showSuccessToast('Outline Generated Successfully');
+    } else {
+      showErrorToast('Failed to generate Outline.Please try again.');
+    }
+    setIsGenerating(false);
   };
 
   const handleGenerate = () => {};
