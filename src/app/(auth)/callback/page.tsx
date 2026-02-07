@@ -1,4 +1,4 @@
-import { onAuthenticateUser } from '@/actions/user';
+import { onAuthenticateUser } from '@/app/actions/user';
 import { redirect } from 'next/navigation';
 
 export default async function AuthCallbackPage() {
@@ -11,7 +11,6 @@ export default async function AuthCallbackPage() {
   if (auth.status === 403) {
     redirect('/sign-in');
   }
-
 
   redirect('/error');
 }

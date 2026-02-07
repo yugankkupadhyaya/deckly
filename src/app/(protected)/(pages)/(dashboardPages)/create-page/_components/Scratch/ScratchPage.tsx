@@ -18,7 +18,7 @@ import { Input } from '../../../../../../../components/ui/input';
 import CardList from '../Common/CardList';
 import { OutlineCard } from '../../../../../../../lib/types';
 import { showErrorToast, showSuccessToast } from '../../../../../../../lib/toast';
-import { createProject } from '../../../../../../../actions/project';
+import { createProject } from '../../../../../../actions/project';
 import { useSlideStore } from '../../../../../../../store/useSlideStore';
 import { useRouter } from 'next/navigation';
 

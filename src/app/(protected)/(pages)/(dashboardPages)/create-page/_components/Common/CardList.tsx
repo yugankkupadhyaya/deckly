@@ -158,7 +158,8 @@ const CardList = ({
 
   const onAddCard = (index: number) => {
     const newCard: OutlineCard = {
-      id: Math.random().toString(36),
+      id: crypto.randomUUID(),
+
       title: editText || 'New Section',
       order: (index !== undefined ? index + 1 : outlines.length) + 1,
     };

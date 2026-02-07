@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { redirect } from 'next/navigation';
-import { onAuthenticateUser } from '../../actions/user';
+import { onAuthenticateUser } from '../actions/user';
 
 type Props = {
   children: React.ReactNode;

@@ -1,9 +1,9 @@
 import React from 'react';
-import { onAuthenticateUser } from '../../../actions/user';
+import { onAuthenticateUser } from '../../actions/user';
 import { redirect } from 'next/navigation';
 import { SidebarInset, SidebarProvider } from '../../../components/ui/sidebar';
 import AppSidebar from '../../../components/global/app-sidebar';
-import { getRecentProjects } from '../../../actions/project';
+import { getRecentProjects } from '../../actions/project';
 import UpperInfoBar from '../../../components/global/upper-info-bar';
 
 type Props = { children: React.ReactNode };

@@ -27,11 +27,15 @@ import CardList from '../Common/CardList';
 import usePromptStore from '../../../../../../../store/usePromptStore';
 import RecentPrompts from './RecentPrompts';
 import { toast } from 'sonner';
-import { currentUser } from '@clerk/nextjs/server';
-import { generateCreativePrompt } from '../../../../../../../actions/ai.actions';
+
+import { generateCreativePrompt } from '../../../../../../actions/ai.actions';
 import { OutlineCard } from '../../../../../../../lib/types';
 import { v4 } from 'uuid';
 import { showErrorToast, showSuccessToast } from '../../../../../../../lib/toast';
+import { createProject } from '../../../../../../actions/project';
+import { useSlideStore } from '../../../../../../../store/useSlideStore';
+import { title } from 'process';
+import { Project } from '@prisma/client';
 
 type Props = {
   onBack: () => void;
@@ -39,7 +43,7 @@ type Props = {
 
 const CreativeAi = ({ onBack }: Props) => {
   const router = useRouter();
-
+  const { setProject } = useSlideStore();
   const { prompts, addPrompt } = usePromptStore();
   const {
     CurrentAiPrompt,
@@ -95,7 +99,44 @@ const CreativeAi = ({ onBack }: Props) => {
     setIsGenerating(false);
   };
 
-  const handleGenerate = () => {};
+  const handleGenerate = async () => {
+    setIsGenerating(true);
+    if (outlines.length === 0) {
+      showErrorToast('Please add at least one card to generate slides ');
+      setIsGenerating(false);
+      return;
+    }
+    try {
+      console.log('DEBUG: Generating project with prompt:start');
+      const res = await createProject(CurrentAiPrompt, outlines.slice(0, noOfCards));
+
+      console.log('DEBUG createProject result:', res);
+
+      if (res.status !== 200 || !res.data) {
+        throw new Error('Unable to create project');
+      }
+      console.log(
+        'DEBUG: Project created successfully, navigating to presentation page',
+        res.data.id
+      );
+      router.push(`/presentation/${res.data.id}/select-theme`);
+      setProject(res.data);
+      addPrompt({
+        id: v4(),
+        title: CurrentAiPrompt || outlines?.[0]?.title,
+        outlines: outlines,
+        createdAt: new Date().toISOString(),
+      });
+      showSuccessToast('Project Successfully created ');
+      setCurrentAIPrompt('');
+      resetOutlines();
+    } catch (error) {
+      console.error(error);
+      showErrorToast('Failed to create a project. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   return (
     <motion.div
@@ -196,7 +237,10 @@ const CreativeAi = ({ onBack }: Props) => {
           disabled={isGenerating}
         >
           {isGenerating ? (
-            <Loader2 className="animate-spin">Generating...</Loader2>
+            <>
+              <Loader2 className="animate-spin"></Loader2>
+              <span>Generating Outline...</span>
+            </>
           ) : (
             'Generate Outline'
           )}
@@ -222,11 +266,15 @@ const CreativeAi = ({ onBack }: Props) => {
       />
 
       {outlines.length > 0 && (
-        <Button className="w-full" onClick={handleGenerate} disabled={isGenerating}>
+        <Button
+          className="w-full flex items-center justify-center gap-2"
+          onClick={handleGenerate}
+          disabled={isGenerating}
+        >
           {isGenerating ? (
             <>
-              <Loader2 className="animate-spin" />
-              Generating..
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Generating...</span>
             </>
           ) : (
             'Generate'

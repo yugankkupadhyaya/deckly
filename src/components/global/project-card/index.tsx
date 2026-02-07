@@ -12,7 +12,7 @@ import AlertDialogBox from '../alert-dialog';
 import { useState } from 'react';
 import { Button } from '../../ui/button';
 import { toast } from 'sonner';
-import { deleteProject, recoverProject } from '../../../actions/project';
+import { deleteProject, recoverProject } from '../../../app/actions/project';
 
 type Props = {
   projectId: string;

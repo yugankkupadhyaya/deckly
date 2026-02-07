@@ -1,4 +1,4 @@
-import { getAllProjects } from '../../../../../actions/project';
+import { getAllProjects } from '../../../../actions/project';
 import Projects from '../../../../../components/global/projects';
 
 const DashboardPage = async () => {

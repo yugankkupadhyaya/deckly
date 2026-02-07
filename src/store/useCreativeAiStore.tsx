@@ -22,8 +22,8 @@ const useCreativeAIStore = create<CreativeAiStore>()(
         })),
 
       addMultipleOutlines: (outlines) =>
-        set((state) => ({
-          outlines: [...outlines, ...state.outlines],
+        set(() => ({
+          outlines: outlines,
         })),
 
       resetOutlines: () => {
