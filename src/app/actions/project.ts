@@ -112,6 +112,7 @@ export const deleteProject = async (projectId: string) => {
     console.error('❌ Internal Server Error:', error);
     return { status: 500, error: 'Internal Server Error' };
   }
+  
 };
 
 export const createProject = async (title: string, outlines: OutlineCard[]) => {

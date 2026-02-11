@@ -6,26 +6,54 @@ import { containerVariants, itemVariants, CreatePageCard } from '@/lib/constants
 import { cn } from '@/lib/utils';
 import usePromptStore from '../../../../../../../store/usePromptStore';
 import RecentPrompts from '../GenerateAi/RecentPrompts';
-import { useEffect } from 'react';
+import { ChevronLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   onSelectOption: (option: string) => void;
 };
 
 const CreatePage = ({ onSelectOption }: Props) => {
-  const { prompts, setPage } = usePromptStore();
+  const { prompts } = usePromptStore();
+  const router = useRouter();
+
+  const handleBack = () => {
+    router.push('/dashboard');
+  };
 
   return (
     <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="space-y-10"
+      className="space-y-12"
     >
-      <motion.div variants={itemVariants} className="text-center space-y-2">
-        <h1 className="text-4xl font-bold text-primary">How would you like to get started?</h1>
-        <p className="text-secondary">Choose your preferred method to begin</p>
-      </motion.div>
+      {/* Top section */}
+      <div className="flex flex-col gap-8">
+        {/* Back button */}
+        <Button
+          onClick={handleBack}
+          variant="ghost"
+          size="sm"
+          className="
+    w-fit rounded-full
+    bg-card/70
+    hover:bg-card
+    border border-border/40
+    backdrop-blur-md
+    shadow-sm
+  "
+        >
+          <ChevronLeft className="h-4 w-4 mr-1" />
+          Back to Dashboard
+        </Button>
+
+        {/* Heading */}
+        <motion.div variants={itemVariants} className="text-center space-y-2">
+          <h1 className="text-4xl font-bold text-primary">How would you like to get started?</h1>
+          <p className="text-secondary">Choose your preferred method to begin</p>
+        </motion.div>
+      </div>
 
       {/* Cards */}
       <motion.div variants={containerVariants} className="grid gap-6 md:grid-cols-3">
@@ -43,7 +71,6 @@ const CreatePage = ({ onSelectOption }: Props) => {
               option.highlight ? 'bg-vivid-gradient' : 'hover:bg-vivid-border'
             )}
           >
-            {/* Inner card */}
             <motion.div
               className={cn(
                 'w-full h-full rounded-xl bg-card p-6 flex flex-col gap-y-6',
@@ -52,18 +79,16 @@ const CreatePage = ({ onSelectOption }: Props) => {
             >
               {/* Content */}
               <div className="flex flex-col gap-y-3">
-                <div>
-                  <p className="text-primary text-lg font-semibold">{option.title}</p>
+                <p className="text-primary text-lg font-semibold">{option.title}</p>
 
-                  <p
-                    className={cn(
-                      'text-4xl font-bold leading-tight',
-                      option.highlight ? 'text-vivid' : 'text-primary'
-                    )}
-                  >
-                    {option.highlightedText}
-                  </p>
-                </div>
+                <p
+                  className={cn(
+                    'text-4xl font-bold leading-tight',
+                    option.highlight ? 'text-vivid' : 'text-primary'
+                  )}
+                >
+                  {option.highlightedText}
+                </p>
               </div>
 
               {/* Action */}
@@ -75,7 +100,7 @@ const CreatePage = ({ onSelectOption }: Props) => {
                 <Button
                   variant={option.highlight ? 'default' : 'outline'}
                   size="sm"
-                  className="rounded-xl font-bold cursor-pointer"
+                  className="rounded-xl font-bold"
                   onClick={() => onSelectOption(option.type)}
                 >
                   {option.highlight ? 'Generate' : 'Continue'}
@@ -85,6 +110,8 @@ const CreatePage = ({ onSelectOption }: Props) => {
           </motion.div>
         ))}
       </motion.div>
+
+      {/* Recent prompts */}
       {prompts.length > 0 && <RecentPrompts />}
     </motion.div>
   );

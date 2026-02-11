@@ -28,7 +28,7 @@ type Props = {
 
 const ScratchPage = ({ onBack }: Props) => {
   const router = useRouter();
-  const { setProject } = useSlideStore();
+  const { setActiveProject: setProject } = useSlideStore();
   const { resetOutlines, outlines, addMultipleOutlines, addOutlines } = useScratchStore();
 
   const [selectedCount, setSelectedCount] = useState('0');

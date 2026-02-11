@@ -7,7 +7,7 @@ interface SlideState {
   slides: Slide[];
   project: Project | null;
   setSlides: (slides: Slide[]) => void;
-  setProject: (project: Project) => void;
+  setActiveProject: (project: Project) => void;
   currentTheme: Theme;
   setCurrentTheme: (theme: Theme) => void;
 }
@@ -30,7 +30,7 @@ export const useSlideStore = create<SlideState>()(
         set({ slides });
       },
       project: null,
-      setProject: (project) => set({ project }),
+      setActiveProject: (project) => set({ project }),
       currentTheme: defaultTheme,
       setCurrentTheme: (theme: Theme) => {
         set({ currentTheme: theme });

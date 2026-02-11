@@ -21,8 +21,9 @@ type Props = {
 const RecentOpen = ({ recentProjects }: Props) => {
   const router = useRouter();
   const { setSlides } = useSlideStore();
+
   const handleClick = (projectId: string, slides: JsonValue) => {
-    if (!projectId || !slides) {
+    if (!projectId) {
       toast.error('Project not found.', {
         description: 'Please try again',
       });
@@ -48,7 +49,7 @@ const RecentOpen = ({ recentProjects }: Props) => {
                   handleClick(item.id, item.slides);
                 }}
               >
-                <span>testing</span>
+                <span>{item.title}</span>
               </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>

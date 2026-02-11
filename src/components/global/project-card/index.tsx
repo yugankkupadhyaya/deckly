@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { Button } from '../../ui/button';
 import { toast } from 'sonner';
 import { deleteProject, recoverProject } from '../../../app/actions/project';
+import { useProjectStore } from '../../../store/useProjectStore';
 
 type Props = {
   projectId: string;
@@ -34,7 +35,7 @@ const ProjectCard = ({
 }: Props) => {
   const router = useRouter();
   const { setSlides } = useSlideStore();
-
+  const { setProjects, removeProject } = useProjectStore();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -90,6 +91,7 @@ const ProjectCard = ({
         });
         return;
       }
+      removeProject(projectId);
       setOpen(false);
       router.refresh();
       toast.success('Success', {

@@ -43,7 +43,7 @@ type Props = {
 
 const CreativeAi = ({ onBack }: Props) => {
   const router = useRouter();
-  const { setProject } = useSlideStore();
+  const { setActiveProject: setProject } = useSlideStore();
   const { prompts, addPrompt } = usePromptStore();
   const {
     CurrentAiPrompt,

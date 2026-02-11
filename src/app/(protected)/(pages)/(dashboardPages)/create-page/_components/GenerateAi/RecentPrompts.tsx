@@ -14,7 +14,7 @@ import useCreativeAIStore from '../../../../../../../store/useCreativeAiStore';
 type Props = {};
 
 const RecentPrompts = (props: Props) => {
-  const { prompts, setPage } = usePromptStore();
+  const { prompts, setPage, removePrompt } = usePromptStore();
   const { addMultipleOutlines, addOutline, setCurrentAIPrompt, outlines } = useCreativeAIStore();
 
   const handleEdit = (id: string) => {
@@ -33,27 +33,88 @@ const RecentPrompts = (props: Props) => {
       <motion.h2 variants={itemVariants} className="text-2xl font-semibold text-center">
         Your recent Prompts
       </motion.h2>
-      <motion.div variants={containerVariants} className="space-y-2 w-full lg:max-w-80% mx-auto">
+      <motion.div variants={containerVariants} className="space-y-6 max-w-4xl mx-auto">
         {prompts.map((prompt, i) => (
           <motion.div key={i} variants={itemVariants}>
-            <Card className="p-4 items-center justify-between hover:bg-accent/50 transition-colors duration-300">
-              <div className="max-w-70%">
-                <h3 className="font-semibold text-xl line-clamp-1">{prompt.title}</h3>
-                <p className="font-semibold text-sm text-muted-foreground">
-                  {timeAgo(prompt.createdAt)}
-                </p>
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="text-sm text-vivid">Creative Ai</span>
-                <Button
-                  variant="default"
-                  size={'sm'}
-                  className="rounded-xl bg-primary-20 dark:hover:bg-gray-700 hover:bg-gray-200 text-primary
-                  cursor-pointer"
-                  onClick={() => handleEdit(prompt.id)}
+            <Card
+              className="
+    w-full
+    rounded-2xl
+    px-6 py-5
+    bg-muted/40
+    border border-border/50
+    transition-all duration-200
+    hover:border-border
+  "
+            >
+              <div className="flex flex-col gap-3">
+                {/* Title */}
+                <h3 className="text-lg font-semibold text-primary leading-tight">{prompt.title}</h3>
+
+                {/* Meta */}
+                <p className="text-sm text-muted-foreground">{timeAgo(prompt.createdAt)}</p>
+
+                {/* Footer */}
+
+                <div
+                  className="
+    flex flex-col gap-3
+    sm:flex-row sm:items-center sm:justify-between
+    pt-2
+  "
                 >
-                  Edit
-                </Button>
+                  {/* Left badge */}
+                  <span
+                    className="
+      inline-flex w-fit
+      items-center
+      rounded-full
+      px-3 py-1
+      text-xs font-semibold
+      bg-vivid/10
+      text-vivid
+    "
+                  >
+                    Creative AI
+                  </span>
+
+                  {/* Actions */}
+                  <div className="flex gap-2 w-full sm:w-auto">
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => handleEdit(prompt.id)}
+                      className="
+        flex-1 sm:flex-none
+        rounded-xl
+        px-4
+        font-semibold
+        bg-background/60
+        hover:bg-background/80
+      "
+                    >
+                      Edit
+                    </Button>
+
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        removePrompt(prompt.id);
+                        toast.success('Prompt removed');
+                      }}
+                      className="
+        flex-1 sm:flex-none
+        rounded-xl
+        px-4
+        text-destructive
+        hover:bg-destructive/10
+      "
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                </div>
               </div>
             </Card>
           </motion.div>
