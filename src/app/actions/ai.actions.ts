@@ -10,20 +10,50 @@ import { ContentItem, ContentType, Slide } from '../../lib/types';
    OPENAI CLIENT (Single Instance)
 ================================= */
 
-const openai = new OpenAI({
-  apiKey: process.env.OPEN_ROUTER_API_KEY!,
-  baseURL: 'https://openrouter.ai/api/v1',
-});
+function getOpenRouterClient() {
+  const apiKey = process.env.OPEN_ROUTER_API_KEY ?? process.env.OPENROUTER_API_KEY;
+  if (!apiKey) {
+    throw new Error('Missing OpenRouter API key. Set OPEN_ROUTER_API_KEY (or OPENROUTER_API_KEY).');
+  }
+
+  return new OpenAI({
+    apiKey,
+    baseURL: 'https://openrouter.ai/api/v1',
+  });
+}
+
+function toErrorMessage(err: unknown) {
+  if (err instanceof Error) return err.message;
+  try {
+    return JSON.stringify(err);
+  } catch {
+    return String(err);
+  }
+}
 
 /* ===============================
    UTILITY
 ================================= */
 
 function extractJson(text: string): string {
-  return text
-    .replace(/^```(?:json)?\s*/i, '')
-    .replace(/```$/i, '')
-    .trim();
+  const trimmed = text.trim();
+
+  // Handle fenced JSON like: ```json\n{...}\n```\n
+  if (trimmed.startsWith('```')) {
+    return trimmed
+      .replace(/^```[a-zA-Z]*\s*\n?/, '')
+      .replace(/```$/i, '')
+      .trim();
+  }
+
+  // Best-effort: extract the first JSON object in the response.
+  const firstBrace = trimmed.indexOf('{');
+  const lastBrace = trimmed.lastIndexOf('}');
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    return trimmed.slice(firstBrace, lastBrace + 1).trim();
+  }
+
+  return trimmed;
 }
 
 /* ===============================
@@ -56,8 +86,9 @@ Return EXACTLY this format:
 `;
 
   try {
+    const openai = getOpenRouterClient();
     const completion = await openai.chat.completions.create({
-      model: 'deepseek/deepseek-r1-0528:free',
+      model: 'openai/gpt-4o-mini',
       messages: [
         {
           role: 'system',
@@ -88,7 +119,7 @@ Return EXACTLY this format:
     }
   } catch (err) {
     console.error('OpenRouter error:', err);
-    return { status: 500, error: 'INTERNAL SERVER ERROR' };
+    return { status: 500, error: toErrorMessage(err) };
   }
 };
 
@@ -515,6 +546,7 @@ const existingLayouts = [
 
 const generateImageUrl = async (prompt: string): Promise<string> => {
   try {
+    const openai = getOpenRouterClient();
     const improvedPrompt = `
 Create a highly realistic, professional image based on the following description. The image should look as if captured in real life, with attention to detail, lighting, and texture.
 
@@ -641,8 +673,9 @@ Return EXACTLY this format:
 `;
 
   try {
+    const openai = getOpenRouterClient();
     const completion = await openai.chat.completions.create({
-      model: 'deepseek/deepseek-r1-0528:free',
+      model: 'openai/gpt-4o-mini',
       messages: [
         { role: 'system', content: 'you generate json layout for presentations' },
         { role: 'user', content: prompt },

@@ -11,6 +11,9 @@ import { themes } from '../../../../lib/constants';
 import { Theme } from '../../../../lib/types';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import Navbar from './_components/Navbar/Navbar';
+import { persist } from 'zustand/middleware';
+import LayoutPreview from './_components/editor-sidebar/leftSidebar/LayoutPreview';
 
 const Page = () => {
   const router = useRouter();
@@ -18,7 +21,7 @@ const Page = () => {
   const { setTheme } = useTheme();
   const [isLoading, setIsLoading] = useState(true);
 
-  const { setCurrentTheme, setSlides, setActiveProject: setProject } = useSlideStore();
+  const { setCurrentTheme, setSlides, setActiveProject: setProject, currentTheme } = useSlideStore();
 
   useEffect(() => {
     const loadProject = async () => {
@@ -31,7 +34,11 @@ const Page = () => {
           return;
         }
 
+        console.log('Fetched themeName:', res.data.themeName);
+
         const findTheme = themes.find((theme) => theme.name === res.data.themeName);
+
+        console.log('Resolved theme:', findTheme);
 
         const resolvedTheme = findTheme?.type === 'dark' ? 'dark' : 'light';
 
@@ -60,7 +67,23 @@ const Page = () => {
     );
   }
 
-  return <DndProvider backend={HTML5Backend}>{/* Your presentation UI here */}</DndProvider>;
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <Navbar presentationId={params.presentation as string} theme={currentTheme}></Navbar>
+      <div
+        className="flex-1 flex over pt-16"
+        style={{
+          color: currentTheme.fontColor,
+          fontFamily: currentTheme.fontFamily,
+          backgroundColor: currentTheme.backgroundColor,
+        }}
+      >
+
+<LayoutPreview/>
+
+      </div>
+    </DndProvider>
+  );
 };
 
 export default Page;

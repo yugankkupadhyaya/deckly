@@ -80,7 +80,7 @@ const CreativeAi = ({ onBack }: Props) => {
     }
     setIsGenerating(true);
     const res = await generateCreativePrompt(CurrentAiPrompt);
-    if (res.status === 200 && res?.data?.outlines) {
+    if (res.status === 200 && Array.isArray(res?.data?.outlines)) {
       const cardsData: OutlineCard[] = [];
       res.data.outlines.map((outline: string, idx: number) => {
         const newCard = {
@@ -94,7 +94,7 @@ const CreativeAi = ({ onBack }: Props) => {
       setNoOfCards(cardsData.length);
       showSuccessToast('Outline Generated Successfully');
     } else {
-      showErrorToast('Failed to generate Outline.Please try again.');
+      showErrorToast(res?.error || 'Failed to generate outline. Please try again.');
     }
     setIsGenerating(false);
   };
