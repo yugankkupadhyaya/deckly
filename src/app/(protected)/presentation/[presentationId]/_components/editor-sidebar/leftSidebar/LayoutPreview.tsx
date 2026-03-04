@@ -3,6 +3,7 @@ import { useSlideStore } from '../../../../../../../store/useSlideStore';
 import { ScrollArea } from '../../../../../../../components/ui/scroll-area';
 import { Divide } from 'lucide-react';
 import { Skeleton } from '../../../../../../../components/ui/skeleton';
+import { Slide } from '../../../../../../../lib/types';
 
 type Props = {};
 
@@ -31,7 +32,17 @@ const LayoutPreview = (props: Props) => {
               <span className="text-xs dark:text-gray-200 text-gray-400" suppressHydrationWarning>
                 {slides?.length}slides
               </span>
-            </div>
+              </div>
+              {/* WIP:Add the draggable slide preview after you build the editor  */}
+              {/* {slides.map((slide, index) => (
+                <DraggableSlidePreview
+                  key={slide.id || index}
+                  slide={slide}
+                  index={index}
+                  moveSlide={moveSlide}
+                />
+              ))} */}
+
           </div>
         )}
       </ScrollArea>

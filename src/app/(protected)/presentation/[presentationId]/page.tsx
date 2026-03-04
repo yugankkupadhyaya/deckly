@@ -14,6 +14,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import Navbar from './_components/Navbar/Navbar';
 import { persist } from 'zustand/middleware';
 import LayoutPreview from './_components/editor-sidebar/leftSidebar/LayoutPreview';
+import Editor from './_components/editor/Editor';
 
 const Page = () => {
   const router = useRouter();
@@ -21,7 +22,12 @@ const Page = () => {
   const { setTheme } = useTheme();
   const [isLoading, setIsLoading] = useState(true);
 
-  const { setCurrentTheme, setSlides, setActiveProject: setProject, currentTheme } = useSlideStore();
+  const {
+    setCurrentTheme,
+    setSlides,
+    setActiveProject: setProject,
+    currentTheme,
+  } = useSlideStore();
 
   useEffect(() => {
     const loadProject = async () => {
@@ -78,9 +84,11 @@ const Page = () => {
           backgroundColor: currentTheme.backgroundColor,
         }}
       >
+        <LayoutPreview />
 
-<LayoutPreview/>
-
+        <div className="flex-1 pr-16 ml-64">
+          <Editor isEditable={true} />
+        </div>
       </div>
     </DndProvider>
   );
