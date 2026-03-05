@@ -8,8 +8,8 @@ import { Slide } from '../../../../../../../lib/types';
 type Props = {};
 
 const LayoutPreview = (props: Props) => {
-  const { getOrderSlides, reOrderSlides } = useSlideStore();
-  const slides = getOrderSlides();
+  const { getOrderedSlides, reOrderSlides } = useSlideStore();
+  const slides = getOrderedSlides();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,9 +32,9 @@ const LayoutPreview = (props: Props) => {
               <span className="text-xs dark:text-gray-200 text-gray-400" suppressHydrationWarning>
                 {slides?.length}slides
               </span>
-              </div>
-              {/* WIP:Add the draggable slide preview after you build the editor  */}
-              {/* {slides.map((slide, index) => (
+            </div>
+            {/* WIP:Add the draggable slide preview after you build the editor  */}
+            {/* {slides.map((slide, index) => (
                 <DraggableSlidePreview
                   key={slide.id || index}
                   slide={slide}
@@ -42,7 +42,6 @@ const LayoutPreview = (props: Props) => {
                   moveSlide={moveSlide}
                 />
               ))} */}
-
           </div>
         )}
       </ScrollArea>

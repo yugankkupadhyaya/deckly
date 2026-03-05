@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Slide, Theme } from '../lib/types';
+import { ContentItem, Slide, Theme } from '../lib/types';
 import { Project } from '@prisma/client';
 import { v4 } from 'uuid';
 
@@ -17,8 +17,15 @@ interface SlideState {
   removeSlide: (id: string) => void;
   addSlideAtIndex: (slide: Slide, index: number) => void;
 
-  getOrderSlides: () => Slide[];
+  getOrderedSlides: () => Slide[];
   reOrderSlides: (fromIndex: number, toIndex: number) => void;
+  setCurrentSlide: (index: number) => void;
+
+  updateContentItem: (
+    slideId: string,
+    contentId: string,
+    newContent: string | string[] | ContentItem[]
+  ) => void;
 }
 
 const defaultTheme: Theme = {
@@ -39,30 +46,23 @@ export const useSlideStore = create<SlideState>()(
       currentTheme: defaultTheme,
       currentSlide: 0,
 
-      setSlides: (slides: Slide[]) => {
-        set({ slides });
-      },
+      setSlides: (slides) => set({ slides }),
 
-      setActiveProject: (project: Project) => {
-        set({ project });
-      },
+      setActiveProject: (project) => set({ project }),
 
-      setCurrentTheme: (theme: Theme) => {
-        set({ currentTheme: theme });
-      },
+      setCurrentTheme: (theme) => set({ currentTheme: theme }),
 
-      getOrderSlides: () => {
+      getOrderedSlides: () => {
         const state = get();
         return [...state.slides].sort((a, b) => a.slideOrder - b.slideOrder);
       },
 
-      removeSlide: (id: string) => {
+      removeSlide: (id) =>
         set((state) => ({
           slides: state.slides.filter((slide) => slide.id !== id),
-        }));
-      },
+        })),
 
-      addSlideAtIndex: (slide: Slide, index: number) => {
+      addSlideAtIndex: (slide, index) =>
         set((state) => {
           const newSlides = [...state.slides];
 
@@ -79,11 +79,9 @@ export const useSlideStore = create<SlideState>()(
             slides: newSlides,
             currentSlide: index,
           };
-        });
-      },
-      
+        }),
 
-      reOrderSlides: (fromIndex: number, toIndex: number) => {
+      reOrderSlides: (fromIndex, toIndex) =>
         set((state) => {
           const newSlides = [...state.slides];
 
@@ -96,11 +94,52 @@ export const useSlideStore = create<SlideState>()(
               slideOrder: index,
             })),
           };
-        });
-      },
+        }),
+
+      setCurrentSlide: (index) => set({ currentSlide: index }),
+
+      updateContentItem: (slideId, contentId, newContent) =>
+        set((state) => {
+          const updateContentRecursively = (item: ContentItem): ContentItem => {
+            if (item.id === contentId) {
+              return {
+                ...item,
+                content: newContent as string | string[] | ContentItem[],
+              };
+            }
+
+            if (Array.isArray(item.content)) {
+              return {
+                ...item,
+                content: item.content.map((subItem) => {
+                  if (typeof subItem === 'object' && 'id' in subItem) {
+                    return updateContentRecursively(subItem as ContentItem);
+                  }
+                  return subItem;
+                }) as ContentItem[],
+              };
+            }
+
+            return item;
+          };
+
+          return {
+            slides: state.slides.map((slide) => {
+              if (slide.id !== slideId) return slide;
+
+              return {
+                ...slide,
+                content: Array.isArray(slide.content)
+                  ? slide.content.map((item) => updateContentRecursively(item))
+                  : slide.content,
+              };
+            }),
+          };
+        }),
     }),
     {
       name: 'slide-storage',
     }
   )
 );
+

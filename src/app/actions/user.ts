@@ -35,6 +35,9 @@ export const onAuthenticateUser = async () => {
         dbUser = await client.user.update({
           where: { email },
           data: { clerkId: clerkUser.id },
+          include: {
+            purchasedProjects: { select: { id: true } },
+          },
         });
       }
     }

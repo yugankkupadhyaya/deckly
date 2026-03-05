@@ -2,7 +2,7 @@ export interface Slide {
   id: string;
   slideName: string;
   type: string;
-  content: ContentItem;
+  content: ContentItem | ContentItem[]; // Updated to allow both single and array
   slideOrder: number;
   className?: string;
 }
