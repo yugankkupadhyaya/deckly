@@ -1,4 +1,5 @@
 {
   "prisma.pinToPrisma6": true,
-  "cSpell.words": ["deepseek", "Dialogbox"]
+  "cSpell.words": ["deepseek", "Dialogbox"],
+  "codium.codeCompletion.enable": true
 }
