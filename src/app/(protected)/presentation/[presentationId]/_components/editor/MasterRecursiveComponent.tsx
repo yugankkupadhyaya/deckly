@@ -5,16 +5,29 @@ import { animate, motion } from 'framer-motion';
 import { Heading1 } from '../../../../../../components/global/editor/components/Headings';
 
 type MasterRecursiveComponentProps = {
-  content: ContentItem;
-  onContentChange: (contentId: string, newContent: string | string[] | string[][]) => void;
+  content: ContentItem | ContentItem[];
+  onContentChange: (
+    contentId: string,
+    newContent: string | string[] |  ContentItem[]
+  ) => void;
 
   isPreview?: boolean;
   isEditable?: boolean;
   slideId: string;
   index?: number;
 };
-
-const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
+type ContentRendererProps = {
+  content: ContentItem
+  onContentChange: (
+    contentId: string,
+    newContent: string | string[] | ContentItem[]
+  ) => void
+  isPreview?: boolean
+  isEditable?: boolean
+  slideId: string
+  index?: number
+}
+ export const ContentRenderer: React.FC<ContentRendererProps> = React.memo(
   ({ content, isPreview, isEditable, slideId, index, onContentChange }) => {
     const handleChange = useCallback(
       (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -33,7 +46,8 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
       hidden: { opacity: 0, y: 20 },
       visible: { opacity: 1, y: 0 },
     };
-
+    //wip complete types 
+    
     switch (content.type) {
       case 'heading1':
         return (
@@ -50,4 +64,47 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
     }
   }
 );
-export default ContentRenderer;
+ContentRenderer.displayName="ContentRenderer"
+
+export const MasterRecursiveComponent: React.FC<MasterRecursiveComponentProps> =
+  React.memo(({
+    content,
+    onContentChange,
+    slideId,
+    index,
+    isEditable = true,
+    isPreview = false
+  }) => {
+
+    // ✅ HANDLE ARRAY (RECURSION)
+    if (Array.isArray(content)) {
+      return (
+        <>
+          {content.map((item, i) => (
+            <MasterRecursiveComponent
+              key={item.id}
+              content={item}
+              onContentChange={onContentChange}
+              slideId={slideId}
+              isEditable={isEditable}
+              isPreview={isPreview}
+              index={i}
+            />
+          ))}
+        </>
+      )
+    }
+
+  
+    return (
+      <ContentRenderer
+        content={content}
+        onContentChange={onContentChange}
+        isPreview={isPreview}
+        isEditable={isEditable}
+        slideId={slideId}
+        index={index}
+      />
+    )
+  })
+

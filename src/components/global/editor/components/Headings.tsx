@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { cn } from "../../../../lib/utils";
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 interface HeadingProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   className?: string;
@@ -75,5 +76,8 @@ const createHeading = (displayName: string, defaultClassName: string) => {
 };
 
 const Heading1 = createHeading("Heading1", "text-4xl");
-
-export { Heading1 };
+const Heading2 = createHeading("Heading2", "text-3xl");
+const Heading3 = createHeading("Heading3", "text-2xl");
+const Heading4 = createHeading("Heading4", "text-xl");
+const title =createHeading("Title","text-5xl")
+export { Heading1,Heading2,Heading3,Heading4,title };
