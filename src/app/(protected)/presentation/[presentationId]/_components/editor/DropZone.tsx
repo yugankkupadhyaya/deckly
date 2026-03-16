@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { LayoutSlides } from '../../../../../../lib/types';
 import { cn } from '../../../../../../lib/utils';
 import { useDrop } from 'react-dnd';
@@ -18,6 +18,8 @@ type Props = {
 };
 
 const DropZone = ({ index, onDrop, isEditable }: Props) => {
+  const ref = useRef<HTMLDivElement>(null);
+
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: ['SLIDE', 'Layout'],
 
@@ -33,8 +35,11 @@ const DropZone = ({ index, onDrop, isEditable }: Props) => {
     }),
   });
 
+  drop(ref);
+
   return (
     <div
+      ref={ref}
       className={cn(
         'h-4 rounded-md transition-all duration-200',
         isOver && canDrop ? 'border-green-500 bg-green-100' : 'border-gray-300',

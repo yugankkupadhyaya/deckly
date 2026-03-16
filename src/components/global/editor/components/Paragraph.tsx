@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { cn } from '../../../../lib/utils';
+import { useSlideStore } from '../../../../store/useSlideStore';
 
 interface ParagraphProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   className?: string;
@@ -12,6 +13,7 @@ interface ParagraphProps extends React.TextareaHTMLAttributes<HTMLTextAreaElemen
 const Paragraph = React.forwardRef<HTMLTextAreaElement, ParagraphProps>(
   ({ children, styles, className, isPreview = false, ...props }, ref) => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    const { currentTheme } = useSlideStore();
 
     useEffect(() => {
       const textarea = textAreaRef.current;
@@ -45,7 +47,7 @@ const Paragraph = React.forwardRef<HTMLTextAreaElement, ParagraphProps>(
         }}
         readOnly={isPreview}
         className={cn(
-          'w-full bg-transparent font-normal text-gray-900 placeholder:text-gray-300 focus:outline-none resize-none overflow-hidden leading-tight',
+          'w-full bg-transparent font-normal placeholder:text-gray-300 focus:outline-none resize-none overflow-hidden leading-tight',
           'text-lg',
           previewClassName,
           className
@@ -53,7 +55,8 @@ const Paragraph = React.forwardRef<HTMLTextAreaElement, ParagraphProps>(
         style={{
           padding: 0,
           margin: 0,
-          color: 'inherit',
+          color: currentTheme.fontColor,
+          fontFamily: currentTheme.fontFamily,
           boxSizing: 'content-box',
           lineHeight: '1.2em',
           minHeight: '1.2em',

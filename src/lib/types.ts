@@ -54,6 +54,7 @@ export type ContentType =
   | 'heading4'
   | 'title'
   | 'table'
+  | 'list'
   | 'blockquote'
   | 'numberedList'
   | 'bulletedList'

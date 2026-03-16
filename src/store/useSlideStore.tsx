@@ -196,6 +196,11 @@ export const useSlideStore = create<SlideState>()(
     }),
     {
       name: 'slide-storage',
+      partialize: (state) => ({
+        slides: state.slides,
+        project: state.project,
+        currentSlide: state.currentSlide,
+      }),
     }
   )
 );

@@ -14,6 +14,7 @@ import Paragraph from '../../../../../../components/global/editor/components/Par
 import Table from '../../../../../../components/global/editor/components/Table';
 import ColumnComponent from '../../../../../../components/global/editor/components/ColumnComponent';
 import CustomImage from '../../../../../../components/global/editor/components/ImageComponent';
+import List from '../../../../../../components/global/editor/components/List';
 
 type MasterRecursiveComponentProps = {
   content: ContentItem | ContentItem[];
@@ -190,6 +191,24 @@ export const ContentRenderer: React.FC<ContentRendererProps> = React.memo(
               isPreview={isPreview}
               contentId={content.id}
               onContentChange={onContentChange}
+              isEditable={isEditable}
+            />
+          </motion.div>
+        );
+
+      case 'list':
+        return (
+          <motion.div
+            className="w-full h-full"
+            variants={animationProps}
+            initial="hidden"
+            animate="visible"
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            <List
+              content={content.content as string[]}
+              onChange={(newContent) => onContentChange(content.id, newContent)}
+              isPreview={isPreview}
               isEditable={isEditable}
             />
           </motion.div>

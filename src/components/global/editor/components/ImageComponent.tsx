@@ -1,7 +1,10 @@
+'use client';
+
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import { containerVariants } from '@/lib/constants';
 import UploadImage from './UploadImage';
+import { getRandomImage } from '../../../../lib/images';
 
 type Props = {
   src: string;
@@ -22,15 +25,27 @@ const CustomImage = ({
   onContentChange,
   isEditable,
 }: Props) => {
-  //wip:add open ai image
+  const [imgSrc, setImgSrc] = useState(src && src.length > 0 ? src : getRandomImage());
+  const [hasError, setHasError] = useState(false);
+
+  const handleError = () => {
+    if (!hasError) {
+      setHasError(true);
+      const fallback = getRandomImage();
+      setImgSrc(fallback);
+    }
+  };
+
   return (
-    <div className="relative group w-full h-full rounded-lg:">
+    <div className="relative group w-full h-full rounded-lg overflow-hidden">
       <Image
-        src={src}
+        src={hasError ? getRandomImage() : imgSrc}
         width={isPreview ? 48 : 800}
         height={isPreview ? 48 : 800}
-        alt={alt}
+        alt={alt || 'image'}
         className={`object-cover w-full h-full rounded-lg ${className}`}
+        onError={handleError}
+        unoptimized
       />
       {!isPreview && isEditable && (
         <div className="absolute top-0 left-0 hidden group-hover::block">

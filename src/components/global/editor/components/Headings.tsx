@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { cn } from '../../../../lib/utils';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useSlideStore } from '../../../../store/useSlideStore';
 
 interface HeadingProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   className?: string;
@@ -14,6 +14,7 @@ const createHeading = (displayName: string, defaultClassName: string) => {
   const Heading = React.forwardRef<HTMLTextAreaElement, HeadingProps>(
     ({ children, styles, className, isPreview = false, ...props }, ref) => {
       const textAreaRef = useRef<HTMLTextAreaElement>(null);
+      const { currentTheme } = useSlideStore();
 
       useEffect(() => {
         const textarea = textAreaRef.current;
@@ -47,7 +48,7 @@ const createHeading = (displayName: string, defaultClassName: string) => {
           }}
           readOnly={isPreview}
           className={cn(
-            'w-full bg-transparent font-normal text-gray-900 placeholder:text-gray-300 focus:outline-none resize-none overflow-hidden leading-tight',
+            'w-full bg-transparent font-normal placeholder:text-gray-300 focus:outline-none resize-none overflow-hidden leading-tight',
             defaultClassName,
             previewClassName,
             className
@@ -55,7 +56,8 @@ const createHeading = (displayName: string, defaultClassName: string) => {
           style={{
             padding: 0,
             margin: 0,
-            color: 'inherit',
+            color: currentTheme.fontColor,
+            fontFamily: currentTheme.fontFamily,
             boxSizing: 'content-box',
             lineHeight: '1.2em',
             minHeight: '1.2em',

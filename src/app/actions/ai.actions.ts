@@ -166,9 +166,8 @@ const existingLayouts = [
               id: uuidv4(),
               type: 'image' as ContentType,
               name: 'Image',
-              content:
-                'https://plus.unsplash.com/premium_photo-1729004379397-ece899804701?q=80&w=2767&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-              alt: 'Title',
+              content: '',
+              alt: 'Image',
             },
             {
               id: uuidv4(),
@@ -243,9 +242,8 @@ const existingLayouts = [
               type: 'image' as ContentType,
               name: 'Image',
               restrictToDrop: true,
-              content:
-                'https://plus.unsplash.com/premium_photo-1729004379397-ece899804701?q=80&w=2767&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-              alt: 'Title',
+              content: '',
+              alt: 'Image',
             },
           ],
         },
@@ -279,9 +277,8 @@ const existingLayouts = [
                   type: 'image' as ContentType,
                   name: 'Image',
                   className: 'p-3',
-                  content:
-                    'https://plus.unsplash.com/premium_photo-1729004379397-ece899804701?q=80&w=2767&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                  alt: 'Title',
+                  content: '',
+                  alt: 'Image',
                 },
               ],
             },
@@ -363,9 +360,8 @@ const existingLayouts = [
                   type: 'image' as ContentType,
                   name: 'Image',
                   className: 'p-3',
-                  content:
-                    'https://plus.unsplash.com/premium_photo-1729004379397-ece899804701?q=80&w=2767&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                  alt: 'Title',
+                  content: '',
+                  alt: 'Image',
                 },
               ],
             },
@@ -619,8 +615,8 @@ const optimisedExistingLayouts = [
               id: uuidv4(),
               type: 'image' as ContentType,
               name: 'Image',
-              content: 'https://images.unsplash.com/photo-1557804506-669a67965ba0',
-              alt: 'Presentation image',
+              content: '',
+              alt: 'Image',
             },
             {
               id: uuidv4(),
@@ -691,8 +687,8 @@ const optimisedExistingLayouts = [
               id: uuidv4(),
               type: 'image' as ContentType,
               name: 'Image',
-              content: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71',
-              alt: 'Presentation image',
+              content: '',
+              alt: 'Image',
             },
           ],
         },
@@ -767,6 +763,190 @@ const optimisedExistingLayouts = [
             ['Column 1', 'Column 2'],
             ['Data', 'Data'],
           ],
+        },
+      ],
+    },
+  },
+
+  {
+    id: uuidv4(),
+    slideName: 'Heading + Bullet List',
+    type: 'headingList',
+    className: 'p-8 min-h-[200px]',
+    content: {
+      id: uuidv4(),
+      type: 'column' as ContentType,
+      name: 'Column',
+      content: [
+        {
+          id: uuidv4(),
+          type: 'heading1' as ContentType,
+          name: 'Heading1',
+          content: '',
+          placeholder: 'Heading',
+        },
+        {
+          id: uuidv4(),
+          type: 'list' as ContentType,
+          name: 'List',
+          content: ['Point one', 'Point two', 'Point three'],
+        },
+      ],
+    },
+  },
+
+  {
+    id: uuidv4(),
+    slideName: 'Image + Bullet List',
+    type: 'imageList',
+    className: 'min-h-[300px]',
+    content: {
+      id: uuidv4(),
+      type: 'column' as ContentType,
+      name: 'Column',
+      content: [
+        {
+          id: uuidv4(),
+          type: 'resizable-column' as ContentType,
+          name: 'Resizable Column',
+          content: [
+            {
+              id: uuidv4(),
+              type: 'image' as ContentType,
+              name: 'Image',
+              content: '',
+              alt: 'Image',
+            },
+            {
+              id: uuidv4(),
+              type: 'column' as ContentType,
+              name: 'Column',
+              className: 'p-4 flex flex-col justify-center',
+              content: [
+                {
+                  id: uuidv4(),
+                  type: 'heading2' as ContentType,
+                  name: 'Heading2',
+                  content: '',
+                  placeholder: 'Heading',
+                },
+                {
+                  id: uuidv4(),
+                  type: 'list' as ContentType,
+                  name: 'List',
+                  content: ['Point one', 'Point two', 'Point three'],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    id: uuidv4(),
+    slideName: 'Two Columns with Lists',
+    type: 'twoColumnsList',
+    className: 'p-6 min-h-[200px]',
+    content: {
+      id: uuidv4(),
+      type: 'column' as ContentType,
+      name: 'Column',
+      content: [
+        {
+          id: uuidv4(),
+          type: 'heading2' as ContentType,
+          name: 'Heading2',
+          content: '',
+          placeholder: 'Section Title',
+        },
+        {
+          id: uuidv4(),
+          type: 'resizable-column' as ContentType,
+          name: 'Resizable Column',
+          content: [
+            {
+              id: uuidv4(),
+              type: 'list' as ContentType,
+              name: 'List',
+              content: ['Point one', 'Point two'],
+            },
+            {
+              id: uuidv4(),
+              type: 'list' as ContentType,
+              name: 'List',
+              content: ['Point one', 'Point two'],
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    id: uuidv4(),
+    slideName: 'Title + Subtitle + List',
+    type: 'titleSubtitleList',
+    className: 'p-10 flex flex-col justify-center min-h-[200px]',
+    content: {
+      id: uuidv4(),
+      type: 'column' as ContentType,
+      name: 'Column',
+      content: [
+        {
+          id: uuidv4(),
+          type: 'title' as ContentType,
+          name: 'Title',
+          content: '',
+          placeholder: 'Presentation Title',
+        },
+        {
+          id: uuidv4(),
+          type: 'paragraph' as ContentType,
+          name: 'Paragraph',
+          content: '',
+          placeholder: 'Subtitle or description',
+        },
+        {
+          id: uuidv4(),
+          type: 'list' as ContentType,
+          name: 'List',
+          content: ['Point one', 'Point two', 'Point three'],
+        },
+      ],
+    },
+  },
+
+  {
+    id: uuidv4(),
+    slideName: 'Heading + Paragraph + List',
+    type: 'headingParagraphList',
+    className: 'p-8 min-h-[200px]',
+    content: {
+      id: uuidv4(),
+      type: 'column' as ContentType,
+      name: 'Column',
+      content: [
+        {
+          id: uuidv4(),
+          type: 'heading1' as ContentType,
+          name: 'Heading1',
+          content: '',
+          placeholder: 'Heading',
+        },
+        {
+          id: uuidv4(),
+          type: 'paragraph' as ContentType,
+          name: 'Paragraph',
+          content: '',
+          placeholder: 'Short description...',
+        },
+        {
+          id: uuidv4(),
+          type: 'list' as ContentType,
+          name: 'List',
+          content: ['Point one', 'Point two', 'Point three'],
         },
       ],
     },
@@ -860,11 +1040,27 @@ unique designs based on the provided outline.
    but add new styles or components if needed.
 4. Fill placeholder data into content fields
    where required.
-5. Generate unique image placeholders for the
-   'content' property of image components and also
-   alt text according to the outline.
-6. Ensure proper formatting and schema alignment
+5. For image components, leave the 'content'
+   property as an empty string "". Images will
+   be automatically populated with random images.
+6. Use the 'list' type for bullet points - it
+   accepts an array of strings like:
+   ["Point one", "Point two", "Point three"]
+7. Create varied layouts with combinations of:
+   - headings + bullet lists
+   - images + bullet lists
+   - two columns with lists
+   - heading + paragraph + list
+8. Ensure proper formatting and schema alignment
    for the output JSON.
+
+### Available Content Types:
+- title, heading1, heading2, heading3, heading4
+- paragraph
+- list (for bullet points - content is array of strings)
+- image (leave content as "" for random images)
+- table (content is 2D array)
+- column, resizable-column
 
 ### Example Layouts:
 ${JSON.stringify(optimisedExistingLayouts, null, 2)}
@@ -874,21 +1070,11 @@ ${JSON.stringify(outlineArray)}
 
 For each entry in the outline array, generate:
 - A unique JSON layout with creative designs.
-- Properly filled content, including
-  placeholders for image components.
+- Use 'list' type for bullet points instead of
+  multiple paragraph items.
+- Include images with empty content "" for
+  automatic random image population.
 - Clear and well-structured JSON data.
-For Images
-- The alt text should describe the image clearly
-  and concisely.
-- Focus on the main subject(s) of the image and
-  any relevant details such as colors, shapes,
-  people, or objects.
-- Ensure the alt text aligns with the context of
-  the presentation slide it will be used on (e.g.,
-  professional, educational, business-related).
-- Avoid using terms like "image of" or "picture
-  of," and instead focus directly on the content
-  and meaning.
 
 Output the layouts in JSON format. Ensure there
 are no duplicate layouts across the array.
