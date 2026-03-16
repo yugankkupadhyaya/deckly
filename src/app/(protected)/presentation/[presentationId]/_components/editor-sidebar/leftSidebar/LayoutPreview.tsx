@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useSlideStore } from '../../../../../../../store/useSlideStore';
-import { ScrollArea } from '../../../../../../../components/ui/scroll-area';
-import { Divide } from 'lucide-react';
-import { Skeleton } from '../../../../../../../components/ui/skeleton';
-import { Slide } from '../../../../../../../lib/types';
+import { useSlideStore } from '@/store/useSlideStore';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
+import { DraggableSlidePreview } from './DraggableSlidePreview';
 
-type Props = {};
-
-const LayoutPreview = (props: Props) => {
+const LayoutPreview = () => {
   const { getOrderedSlides, reOrderSlides } = useSlideStore();
   const slides = getOrderedSlides();
   const [loading, setLoading] = useState(true);
+
+  const moveSlide = (dragIndex: number, hoverIndex: number) => {
+    reOrderSlides(dragIndex, hoverIndex);
+  };
 
   useEffect(() => {
     if (typeof window != 'undefined') setLoading(false);
@@ -33,15 +34,14 @@ const LayoutPreview = (props: Props) => {
                 {slides?.length}slides
               </span>
             </div>
-            {/* WIP:Add the draggable slide preview after you build the editor  */}
-            {/* {slides.map((slide, index) => (
-                <DraggableSlidePreview
-                  key={slide.id || index}
-                  slide={slide}
-                  index={index}
-                  moveSlide={moveSlide}
-                />
-              ))} */}
+            {slides.map((slide, index) => (
+              <DraggableSlidePreview
+                key={slide.id || index}
+                slide={slide}
+                index={index}
+                moveSlide={moveSlide}
+              />
+            ))}
           </div>
         )}
       </ScrollArea>

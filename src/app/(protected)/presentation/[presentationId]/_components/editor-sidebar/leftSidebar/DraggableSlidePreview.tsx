@@ -1,9 +1,9 @@
 'use client';
 
 import { useRef } from 'react';
-import { useSlideStore } from '../../../../../../store/useSlideStore';
-import { Slide } from '../../../../../../lib/types';
-import { cn } from '../../../../../../lib/utils';
+import { useSlideStore } from '@/store/useSlideStore';
+import { Slide } from '@/lib/types';
+import { cn } from '@/lib/utils';
 import { useDrag, useDrop } from 'react-dnd';
 import { MasterRecursiveComponent } from '../../editor/MasterRecursiveComponent';
 
@@ -42,6 +42,8 @@ export const DraggableSlidePreview: React.FC<DraggableSlidePreviewProps> = ({
 
   drag(drop(ref));
 
+  const handleContentChange = () => {};
+
   return (
     <div
       ref={ref}
@@ -62,6 +64,7 @@ export const DraggableSlidePreview: React.FC<DraggableSlidePreviewProps> = ({
           isPreview={true}
           slideId={slide.id}
           isEditable={false}
+          onContentChange={handleContentChange}
         />
       </div>
     </div>
