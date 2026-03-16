@@ -11,7 +11,7 @@ export interface ContentItem {
   id: string;
   type: ContentType;
   name: string;
-  content: ContentItem[] | string | string[];
+  content: ContentItem[] | string | string[] | string[][];
   initialRows?: number;
   initialColumns?: number;
   restrictToDrop?: boolean;

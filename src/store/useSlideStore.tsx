@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import { ContentItem, Slide, Theme } from '../lib/types';
 import { Project } from '@prisma/client';
 import { v4 } from 'uuid';
+import { useDeprecatedAnimatedState } from 'framer-motion';
 
 interface SlideState {
   slides: Slide[];
@@ -24,7 +25,14 @@ interface SlideState {
   updateContentItem: (
     slideId: string,
     contentId: string,
-    newContent: string | string[] | ContentItem[]
+    newContent: string | string[] | string[][] | ContentItem[]
+  ) => void;
+
+  addComponentInSlide: (
+    slideId: string,
+    item: ContentItem,
+    parentId: string,
+    index: number
   ) => void;
 }
 
@@ -104,7 +112,7 @@ export const useSlideStore = create<SlideState>()(
             if (item.id === contentId) {
               return {
                 ...item,
-                content: newContent as string | string[] | ContentItem[],
+                content: newContent as string | string[] | string[][] | ContentItem[],
               };
             }
 
@@ -136,10 +144,58 @@ export const useSlideStore = create<SlideState>()(
             }),
           };
         }),
+      addComponentInSlide: (slideId, item, parentId, index) =>
+        set((state) => {
+          const updateContentRecursively = (content: ContentItem): ContentItem => {
+            // If this is the container where we insert the new component
+            if (content.id === parentId && Array.isArray(content.content)) {
+              const updatedContent = [...content.content];
+
+              updatedContent.splice(index, 0, {
+                ...item,
+                id: item.id || v4(),
+              });
+
+              return {
+                ...content,
+                content: updatedContent.filter(
+                  (c): c is ContentItem => typeof c === 'object' && c !== null && 'id' in c
+                ),
+              };
+            }
+
+            // If the current item has children, search inside them
+            if (Array.isArray(content.content)) {
+              return {
+                ...content,
+                content: content.content.map((child) =>
+                  typeof child === 'object' && 'id' in child
+                    ? updateContentRecursively(child as ContentItem)
+                    : child
+                ) as ContentItem[],
+              };
+            }
+
+            // Otherwise return item unchanged
+            return content;
+          };
+
+          const updatedSlides = state.slides.map((slide) => {
+            if (slide.id !== slideId) return slide;
+
+            return {
+              ...slide,
+              content: Array.isArray(slide.content)
+                ? slide.content.map((item) => updateContentRecursively(item))
+                : slide.content,
+            };
+          });
+
+          return { slides: updatedSlides };
+        }),
     }),
     {
       name: 'slide-storage',
     }
   )
 );
-

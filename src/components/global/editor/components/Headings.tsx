@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useRef } from "react";
-import { cn } from "../../../../lib/utils";
+import React, { useEffect, useRef } from 'react';
+import { cn } from '../../../../lib/utils';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 interface HeadingProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -11,10 +11,8 @@ interface HeadingProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement>
 }
 
 const createHeading = (displayName: string, defaultClassName: string) => {
-
   const Heading = React.forwardRef<HTMLTextAreaElement, HeadingProps>(
     ({ children, styles, className, isPreview = false, ...props }, ref) => {
-
       const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
       useEffect(() => {
@@ -22,18 +20,18 @@ const createHeading = (displayName: string, defaultClassName: string) => {
 
         if (textarea && !isPreview) {
           const adjustHeight = () => {
-            textarea.style.height = "0";
+            textarea.style.height = '0';
             textarea.style.height = `${textarea.scrollHeight}px`;
           };
 
-          textarea.addEventListener("input", adjustHeight);
+          textarea.addEventListener('input', adjustHeight);
           adjustHeight();
 
-          return () => textarea.removeEventListener("input", adjustHeight);
+          return () => textarea.removeEventListener('input', adjustHeight);
         }
       }, [isPreview]);
 
-      const previewClassName = isPreview ? "text-xs" : "";
+      const previewClassName = isPreview ? 'text-xs' : '';
 
       return (
         <textarea
@@ -41,7 +39,7 @@ const createHeading = (displayName: string, defaultClassName: string) => {
           ref={(el) => {
             textAreaRef.current = el;
 
-            if (typeof ref === "function") {
+            if (typeof ref === 'function') {
               ref(el);
             } else if (ref) {
               (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = el;
@@ -49,7 +47,7 @@ const createHeading = (displayName: string, defaultClassName: string) => {
           }}
           readOnly={isPreview}
           className={cn(
-            "w-full bg-transparent font-normal text-gray-900 placeholder:text-gray-300 focus:outline-none resize-none overflow-hidden leading-tight",
+            'w-full bg-transparent font-normal text-gray-900 placeholder:text-gray-300 focus:outline-none resize-none overflow-hidden leading-tight',
             defaultClassName,
             previewClassName,
             className
@@ -57,11 +55,11 @@ const createHeading = (displayName: string, defaultClassName: string) => {
           style={{
             padding: 0,
             margin: 0,
-            color: "inherit",
-            boxSizing: "content-box",
-            lineHeight: "1.2em",
-            minHeight: "1.2em",
-            ...styles
+            color: 'inherit',
+            boxSizing: 'content-box',
+            lineHeight: '1.2em',
+            minHeight: '1.2em',
+            ...styles,
           }}
         >
           {children}
@@ -75,9 +73,9 @@ const createHeading = (displayName: string, defaultClassName: string) => {
   return Heading;
 };
 
-const Heading1 = createHeading("Heading1", "text-4xl");
-const Heading2 = createHeading("Heading2", "text-3xl");
-const Heading3 = createHeading("Heading3", "text-2xl");
-const Heading4 = createHeading("Heading4", "text-xl");
-const title =createHeading("Title","text-5xl")
-export { Heading1,Heading2,Heading3,Heading4,title };
+const Heading1 = createHeading('Heading1', 'text-4xl');
+const Heading2 = createHeading('Heading2', 'text-3xl');
+const Heading3 = createHeading('Heading3', 'text-2xl');
+const Heading4 = createHeading('Heading4', 'text-xl');
+const Title = createHeading('Title', 'text-5xl');
+export { Heading1, Heading2, Heading3, Heading4, Title };

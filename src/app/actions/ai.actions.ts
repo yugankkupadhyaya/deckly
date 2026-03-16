@@ -540,8 +540,241 @@ const existingLayouts = [
   },
 ];
 
+//==================================
+//      OPTIMISED EXISTING LAYOUTS
+//=====================================
+const optimisedExistingLayouts = [
+  {
+    id: uuidv4(),
+    slideName: 'Title Slide',
+    type: 'titleSlide',
+    className: 'p-10 flex justify-center items-center min-h-[200px]',
+    content: {
+      id: uuidv4(),
+      type: 'column' as ContentType,
+      name: 'Column',
+      content: [
+        {
+          id: uuidv4(),
+          type: 'title' as ContentType,
+          name: 'Title',
+          content: '',
+          placeholder: 'Presentation Title',
+        },
+        {
+          id: uuidv4(),
+          type: 'paragraph' as ContentType,
+          name: 'Paragraph',
+          content: '',
+          placeholder: 'Subtitle or description',
+        },
+      ],
+    },
+  },
+
+  {
+    id: uuidv4(),
+    slideName: 'Heading + Text',
+    type: 'headingText',
+    className: 'p-8 min-h-[200px]',
+    content: {
+      id: uuidv4(),
+      type: 'column' as ContentType,
+      name: 'Column',
+      content: [
+        {
+          id: uuidv4(),
+          type: 'heading1' as ContentType,
+          name: 'Heading1',
+          content: '',
+          placeholder: 'Heading',
+        },
+        {
+          id: uuidv4(),
+          type: 'paragraph' as ContentType,
+          name: 'Paragraph',
+          content: '',
+          placeholder: 'Start typing here...',
+        },
+      ],
+    },
+  },
+
+  {
+    id: uuidv4(),
+    slideName: 'Image + Text',
+    type: 'imageText',
+    className: 'min-h-[300px]',
+    content: {
+      id: uuidv4(),
+      type: 'column' as ContentType,
+      name: 'Column',
+      content: [
+        {
+          id: uuidv4(),
+          type: 'resizable-column' as ContentType,
+          name: 'Resizable Column',
+          content: [
+            {
+              id: uuidv4(),
+              type: 'image' as ContentType,
+              name: 'Image',
+              content: 'https://images.unsplash.com/photo-1557804506-669a67965ba0',
+              alt: 'Presentation image',
+            },
+            {
+              id: uuidv4(),
+              type: 'column' as ContentType,
+              name: 'Column',
+              className: 'p-6 flex flex-col justify-center',
+              content: [
+                {
+                  id: uuidv4(),
+                  type: 'heading2' as ContentType,
+                  name: 'Heading2',
+                  content: '',
+                  placeholder: 'Heading',
+                },
+                {
+                  id: uuidv4(),
+                  type: 'paragraph' as ContentType,
+                  name: 'Paragraph',
+                  content: '',
+                  placeholder: 'Explain the topic...',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    id: uuidv4(),
+    slideName: 'Text + Image',
+    type: 'textImage',
+    className: 'min-h-[300px]',
+    content: {
+      id: uuidv4(),
+      type: 'column' as ContentType,
+      name: 'Column',
+      content: [
+        {
+          id: uuidv4(),
+          type: 'resizable-column' as ContentType,
+          name: 'Resizable Column',
+          content: [
+            {
+              id: uuidv4(),
+              type: 'column' as ContentType,
+              name: 'Column',
+              className: 'p-6 flex flex-col justify-center',
+              content: [
+                {
+                  id: uuidv4(),
+                  type: 'heading2' as ContentType,
+                  name: 'Heading2',
+                  content: '',
+                  placeholder: 'Heading',
+                },
+                {
+                  id: uuidv4(),
+                  type: 'paragraph' as ContentType,
+                  name: 'Paragraph',
+                  content: '',
+                  placeholder: 'Start typing...',
+                },
+              ],
+            },
+            {
+              id: uuidv4(),
+              type: 'image' as ContentType,
+              name: 'Image',
+              content: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71',
+              alt: 'Presentation image',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    id: uuidv4(),
+    slideName: 'Two Columns',
+    type: 'twoColumns',
+    className: 'p-6 min-h-[200px]',
+    content: {
+      id: uuidv4(),
+      type: 'column' as ContentType,
+      name: 'Column',
+      content: [
+        {
+          id: uuidv4(),
+          type: 'heading2' as ContentType,
+          name: 'Heading2',
+          content: '',
+          placeholder: 'Section Title',
+        },
+        {
+          id: uuidv4(),
+          type: 'resizable-column' as ContentType,
+          name: 'Resizable Column',
+          content: [
+            {
+              id: uuidv4(),
+              type: 'paragraph' as ContentType,
+              name: 'Paragraph',
+              content: '',
+              placeholder: 'Column 1 text',
+            },
+            {
+              id: uuidv4(),
+              type: 'paragraph' as ContentType,
+              name: 'Paragraph',
+              content: '',
+              placeholder: 'Column 2 text',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    id: uuidv4(),
+    slideName: 'Table Slide',
+    type: 'tableSlide',
+    className: 'p-8 min-h-[200px]',
+    content: {
+      id: uuidv4(),
+      type: 'column' as ContentType,
+      name: 'Column',
+      content: [
+        {
+          id: uuidv4(),
+          type: 'heading3' as ContentType,
+          name: 'Heading3',
+          content: '',
+          placeholder: 'Table Heading',
+        },
+        {
+          id: uuidv4(),
+          type: 'table' as ContentType,
+          name: 'Table',
+          content: [
+            ['Column 1', 'Column 2'],
+            ['Data', 'Data'],
+          ],
+        },
+      ],
+    },
+  },
+];
+
 /* ===============================
-   IMAGE GENERATION (UNCHANGED PROMPT)
+   IMAGE GENERATION 
 ================================= */
 
 const generateImageUrl = async (prompt: string): Promise<string> => {
@@ -634,7 +867,7 @@ unique designs based on the provided outline.
    for the output JSON.
 
 ### Example Layouts:
-${JSON.stringify(existingLayouts, null, 2)}
+${JSON.stringify(optimisedExistingLayouts, null, 2)}
 
 ### Outline Array:
 ${JSON.stringify(outlineArray)}
@@ -693,7 +926,7 @@ Return EXACTLY this format:
     const cleanResponse = extractJson(responseContent);
     const parsed = JSON.parse(cleanResponse);
 
-    await Promise.all(parsed.layouts.map((layout: Slide) => replaceImagePlaceholders(layout)));
+    // await Promise.all(parsed.layouts.map((layout: Slide) => replaceImagePlaceholders(layout)));
 
     return { status: 200, data: parsed.layouts };
   } catch (error) {
@@ -711,6 +944,7 @@ export const generateLayouts = async (projectId: string, theme: string) => {
     if (!projectId) {
       return { status: 400, error: 'Project Id is required' };
     }
+    console.log('Theme passed to generateLayouts:', theme);
 
     const user = await currentUser();
     if (!user) {

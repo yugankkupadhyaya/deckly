@@ -43,12 +43,15 @@ const Page = () => {
         console.log('Fetched themeName:', res.data.themeName);
 
         const findTheme = themes.find((theme) => theme.name === res.data.themeName);
+        if (!findTheme) {
+          console.warn(`Theme not found for name: ${res.data.themeName}. Applying default theme.`);
+        }
+        const resolvedTheme = findTheme || themes.find((theme) => theme.name === 'Default')!;
 
-        console.log('Resolved theme:', findTheme);
+        setCurrentTheme(resolvedTheme);
+        console.log('Resolved theme:', resolvedTheme);
 
-        const resolvedTheme = findTheme?.type === 'dark' ? 'dark' : 'light';
-
-        setTheme(resolvedTheme);
+        setTheme(resolvedTheme.type);
         setCurrentTheme(resolvedTheme as unknown as Theme);
 
         setProject(res.data);
@@ -75,7 +78,7 @@ const Page = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <Navbar presentationId={params.presentation as string} theme={currentTheme}></Navbar>
+      <Navbar presentationId={params.presentationId as string} theme={currentTheme}></Navbar>
       <div
         className="flex-1 flex over pt-16"
         style={{
