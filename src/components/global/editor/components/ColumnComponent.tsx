@@ -1,9 +1,8 @@
 import { ContentItem } from '@/lib/types';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '../../../ui/resizable';
 import { cn } from '../../../../lib/utils';
 import { MasterRecursiveComponent } from '../../../../app/(protected)/presentation/[presentationId]/_components/editor/MasterRecursiveComponent';
-import Paragraph from './Paragraph';
 
 type Props = {
   content: ContentItem[];
@@ -25,33 +24,12 @@ const ColumnComponent = ({
   onContentChange,
   isEditable,
 }: Props) => {
-  const [columns, setColumns] = useState<ContentItem[]>([]);
-  const createDefaultColumns = (count: number) => {
-    return Array(count)
-      .fill(null)
-      .map(() => {
-        return {
-          id: uuidv4(),
-          type: 'paragraph' as const,
-          name: 'Paragraph',
-          content: '',
-          placeholder: 'start typing..',
-        };
-      });
-  };
-  useEffect(() => {
-    if (content.length === 0) setColumns(createDefaultColumns(2));
-    else {
-      setColumns(content);
-    }
-  }, []);
-
   return (
     <div className="relative w-full h-full">
       <ResizablePanelGroup
         className={cn('h-full w-full flex', !isEditable && '!border-0', className)}
       >
-        {columns.map((item, index) => (
+        {content.map((item, index) => (
           <React.Fragment key={item.id}>
             <ResizablePanel minSize={20} defaultSize={100}>
               <div className={cn('h-full w-full', item.className)}>
@@ -61,10 +39,10 @@ const ColumnComponent = ({
                   onContentChange={onContentChange}
                   slideId={slideId}
                   isEditable={isEditable}
-                ></MasterRecursiveComponent>
+                />
               </div>
             </ResizablePanel>
-            {index < columns.length - 1 && isEditable && (
+            {index < content.length - 1 && isEditable && (
               <ResizableHandle withHandle={!isPreview} />
             )}
           </React.Fragment>
@@ -75,6 +53,3 @@ const ColumnComponent = ({
 };
 
 export default ColumnComponent;
-function uuidv4(): any {
-  throw new Error('Function not implemented.');
-}

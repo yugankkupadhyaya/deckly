@@ -269,46 +269,52 @@ export const ContentRenderer: React.FC<ContentRendererProps> = ({
 };
 ContentRenderer.displayName = 'ContentRenderer';
 
-export const MasterRecursiveComponent: React.FC<MasterRecursiveComponentProps>=(
-  ({ content, onContentChange, slideId, index, isEditable = true, isPreview: propIsPreview }) => {
-    const { isEditing } = useSlideStore();
+export const MasterRecursiveComponent: React.FC<MasterRecursiveComponentProps> = ({
+  content,
+  onContentChange,
+  slideId,
+  index,
+  isEditable = true,
+  isPreview: propIsPreview,
+}) => {
+  const isEditing = useSlideStore((state) => state.isEditing);
 
-    const isPreview = propIsPreview !== undefined ? propIsPreview : !isEditing;
-    if (Array.isArray(content)) {
-      return (
-        <>
-          {!isPreview && isEditable && content.length === 0 && (
-            <Dropper index={0} parentId="" slideId={slideId} />
-          )}
-          {content.map((item, i) => (
-            <React.Fragment key={item.id || i}>
-              {!isPreview && isEditable && <Dropper index={i} parentId="" slideId={slideId} />}
-              <MasterRecursiveComponent
-                content={item}
-                onContentChange={onContentChange}
-                slideId={slideId}
-                isEditable={isEditable}
-                isPreview={isPreview}
-                index={i}
-              />
-            </React.Fragment>
-          ))}
-          {!isPreview && isEditable && content.length > 0 && (
-            <Dropper index={content.length} parentId="" slideId={slideId} />
-          )}
-        </>
-      );
-    }
-
+  const isPreview = propIsPreview !== undefined ? propIsPreview : !isEditing;
+  if (Array.isArray(content)) {
     return (
-      <ContentRenderer
-        content={content}
-        onContentChange={onContentChange}
-        isPreview={isPreview}
-        isEditable={isEditable}
-        slideId={slideId}
-        index={index}
-      />
+      <>
+        {!isPreview && isEditable && content.length === 0 && (
+          <Dropper index={0} parentId="" slideId={slideId} />
+        )}
+        {content.map((item, i) => (
+          <React.Fragment key={item.id || i}>
+            {!isPreview && isEditable && <Dropper index={i} parentId="" slideId={slideId} />}
+            <MasterRecursiveComponent
+              content={item}
+              onContentChange={onContentChange}
+              slideId={slideId}
+              isEditable={isEditable}
+              isPreview={isPreview}
+              index={i}
+            />
+          </React.Fragment>
+        ))}
+        {!isPreview && isEditable && content.length > 0 && (
+          <Dropper index={content.length} parentId="" slideId={slideId} />
+        )}
+      </>
     );
   }
-);
+
+  return (
+    <ContentRenderer
+      content={content}
+      onContentChange={onContentChange}
+      isPreview={isPreview}
+      isEditable={isEditable}
+      slideId={slideId}
+      index={index}
+    />
+  );
+};
+MasterRecursiveComponent.displayName = 'MasterRecursiveComponent';

@@ -3,7 +3,6 @@ import { persist } from 'zustand/middleware';
 import { ContentItem, Slide, Theme } from '../lib/types';
 import { Project } from '@prisma/client';
 import { v4 } from 'uuid';
-import { useDeprecatedAnimatedState } from 'framer-motion';
 
 interface SlideState {
   slides: Slide[];
@@ -87,12 +86,8 @@ export const useSlideStore = create<SlideState>()(
             id: v4(),
           });
 
-          newSlides.forEach((s, i) => {
-            s.slideOrder = i;
-          });
-
           return {
-            slides: newSlides,
+            slides: newSlides.map((s, i) => ({ ...s, slideOrder: i })),
             currentSlide: index,
           };
         }),
@@ -128,7 +123,7 @@ export const useSlideStore = create<SlideState>()(
               return {
                 ...item,
                 content: item.content.map((child) =>
-                  typeof child === 'object' && 'id' in child
+                  typeof child === 'object' && child !== null && 'id' in child
                     ? updateRecursive(child as ContentItem)
                     : child
                 ) as typeof item.content,
@@ -146,7 +141,7 @@ export const useSlideStore = create<SlideState>()(
                 ...slide,
                 content: Array.isArray(slide.content)
                   ? slide.content.map(updateRecursive)
-                  : slide.content,
+                  : updateRecursive(slide.content),
               };
             }),
           };
@@ -225,7 +220,7 @@ export const useSlideStore = create<SlideState>()(
               ...slide,
               content: Array.isArray(slide.content)
                 ? slide.content.map((item) => updateContentRecursively(item))
-                : slide.content,
+                : updateContentRecursively(slide.content),
             };
           });
 
@@ -238,6 +233,7 @@ export const useSlideStore = create<SlideState>()(
         slides: state.slides,
         project: state.project,
         currentSlide: state.currentSlide,
+        currentTheme: state.currentTheme,
       }),
     }
   )
