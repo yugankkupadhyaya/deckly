@@ -1011,10 +1011,17 @@ const findImageComponents = (layout: ContentItem): ContentItem[] => {
 };
 
 const replaceImagePlaceholders = async (layout: Slide) => {
-  const imageComponents = findImageComponents(layout.content);
-
-  for (const component of imageComponents) {
-    component.content = await generateImageUrl(component.alt || 'Place Holder image');
+  const content = layout.content;
+  if (Array.isArray(content)) {
+    const imageComponents = content.flatMap((item) => findImageComponents(item));
+    for (const component of imageComponents) {
+      component.content = await generateImageUrl(component.alt || 'Place Holder image');
+    }
+  } else if (content) {
+    const imageComponents = findImageComponents(content);
+    for (const component of imageComponents) {
+      component.content = await generateImageUrl(component.alt || 'Place Holder image');
+    }
   }
 };
 

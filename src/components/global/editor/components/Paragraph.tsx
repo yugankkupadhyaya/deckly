@@ -8,12 +8,15 @@ interface ParagraphProps extends React.TextareaHTMLAttributes<HTMLTextAreaElemen
   className?: string;
   styles?: React.CSSProperties;
   isPreview?: boolean;
+  isEditable?: boolean;
 }
 
 const Paragraph = React.forwardRef<HTMLTextAreaElement, ParagraphProps>(
-  ({ children, styles, className, isPreview = false, ...props }, ref) => {
+  ({ children, styles, className, isPreview = false, isEditable = true, ...props }, ref) => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
-    const { currentTheme } = useSlideStore();
+    const { currentTheme, isEditing: globalIsEditing } = useSlideStore();
+    
+    const isEditableFinal = isEditable && globalIsEditing;
 
     useEffect(() => {
       const textarea = textAreaRef.current;
@@ -29,9 +32,10 @@ const Paragraph = React.forwardRef<HTMLTextAreaElement, ParagraphProps>(
 
         return () => textarea.removeEventListener('input', adjustHeight);
       }
-    }, [isPreview]);
+    }, [isPreview, children]);
 
     const previewClassName = isPreview ? 'text-xs' : '';
+    const editableClassName = !isPreview && isEditableFinal ? 'focus:bg-blue-50 dark:focus:bg-blue-950/30 focus:ring-2 focus:ring-blue-500/50 rounded-md transition-all cursor-text' : '';
 
     return (
       <textarea
@@ -45,15 +49,16 @@ const Paragraph = React.forwardRef<HTMLTextAreaElement, ParagraphProps>(
             (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = el;
           }
         }}
-        readOnly={isPreview}
+        readOnly={isPreview || !isEditableFinal}
         className={cn(
-          'w-full bg-transparent font-normal placeholder:text-gray-300 focus:outline-none resize-none overflow-hidden leading-tight',
+          'w-full bg-transparent font-normal placeholder:text-gray-300 dark:placeholder:text-gray-600 focus:outline-none resize-none overflow-hidden leading-tight',
           'text-lg',
           previewClassName,
+          editableClassName,
           className
         )}
         style={{
-          padding: 0,
+          padding: !isPreview && isEditableFinal ? '4px 8px' : 0,
           margin: 0,
           color: currentTheme.fontColor,
           fontFamily: currentTheme.fontFamily,

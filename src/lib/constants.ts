@@ -5,7 +5,7 @@ import { Theme } from './types';
 interface NavItem {
   title: string;
   url: string;
-  icon: React.ComponentType;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
 }
 
 export const data: {

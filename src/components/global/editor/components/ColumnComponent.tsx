@@ -49,7 +49,6 @@ const ColumnComponent = ({
   return (
     <div className="relative w-full h-full">
       <ResizablePanelGroup
-        direction="horizontal"
         className={cn('h-full w-full flex', !isEditable && '!border-0', className)}
       >
         {columns.map((item, index) => (

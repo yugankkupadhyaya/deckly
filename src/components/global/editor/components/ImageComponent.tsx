@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { containerVariants } from '@/lib/constants';
 import UploadImage from './UploadImage';
 import { getRandomImage } from '../../../../lib/images';
@@ -25,14 +25,25 @@ const CustomImage = ({
   onContentChange,
   isEditable,
 }: Props) => {
-  const [imgSrc, setImgSrc] = useState(src && src.length > 0 ? src : getRandomImage());
+  const [imgSrc, setImgSrc] = useState<string>('');
   const [hasError, setHasError] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    if (!isInitialized) {
+      if (src && src.length > 0) {
+        setImgSrc(src);
+      } else {
+        setImgSrc(getRandomImage());
+      }
+      setIsInitialized(true);
+    }
+  }, [src, isInitialized]);
 
   const handleError = () => {
     if (!hasError) {
       setHasError(true);
-      const fallback = getRandomImage();
-      setImgSrc(fallback);
+      setImgSrc(getRandomImage());
     }
   };
 
@@ -48,7 +59,7 @@ const CustomImage = ({
         unoptimized
       />
       {!isPreview && isEditable && (
-        <div className="absolute top-0 left-0 hidden group-hover::block">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
           <UploadImage contentId={contentId} onContentChange={onContentChange} />
         </div>
       )}

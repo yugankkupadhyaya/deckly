@@ -10,10 +10,13 @@ interface SlideState {
   project: Project | null;
   currentTheme: Theme;
   currentSlide: number;
+  isEditing: boolean;
 
   setSlides: (slides: Slide[]) => void;
   setActiveProject: (project: Project) => void;
   setCurrentTheme: (theme: Theme) => void;
+  setIsEditing: (isEditing: boolean) => void;
+  toggleEditing: () => void;
 
   removeSlide: (id: string) => void;
   addSlideAtIndex: (slide: Slide, index: number) => void;
@@ -53,12 +56,17 @@ export const useSlideStore = create<SlideState>()(
       project: null,
       currentTheme: defaultTheme,
       currentSlide: 0,
+      isEditing: false,
 
       setSlides: (slides) => set({ slides }),
 
       setActiveProject: (project) => set({ project }),
 
       setCurrentTheme: (theme) => set({ currentTheme: theme }),
+
+      setIsEditing: (isEditing) => set({ isEditing }),
+
+      toggleEditing: () => set((state) => ({ isEditing: !state.isEditing })),
 
       getOrderedSlides: () => {
         const state = get();
@@ -108,23 +116,22 @@ export const useSlideStore = create<SlideState>()(
 
       updateContentItem: (slideId, contentId, newContent) =>
         set((state) => {
-          const updateContentRecursively = (item: ContentItem): ContentItem => {
+          const updateRecursive = (item: ContentItem): ContentItem => {
             if (item.id === contentId) {
               return {
                 ...item,
-                content: newContent as string | string[] | string[][] | ContentItem[],
+                content: newContent,
               };
             }
 
             if (Array.isArray(item.content)) {
               return {
                 ...item,
-                content: item.content.map((subItem) => {
-                  if (typeof subItem === 'object' && 'id' in subItem) {
-                    return updateContentRecursively(subItem as ContentItem);
-                  }
-                  return subItem;
-                }) as ContentItem[],
+                content: item.content.map((child) =>
+                  typeof child === 'object' && 'id' in child
+                    ? updateRecursive(child as ContentItem)
+                    : child
+                ) as typeof item.content,
               };
             }
 
@@ -138,7 +145,7 @@ export const useSlideStore = create<SlideState>()(
               return {
                 ...slide,
                 content: Array.isArray(slide.content)
-                  ? slide.content.map((item) => updateContentRecursively(item))
+                  ? slide.content.map(updateRecursive)
                   : slide.content,
               };
             }),
@@ -147,6 +154,22 @@ export const useSlideStore = create<SlideState>()(
       addComponentInSlide: (slideId, item, parentId, index) =>
         set((state) => {
           const updateContentRecursively = (content: ContentItem): ContentItem => {
+            // If parentId is 'root' or empty, we insert at the root level of the slide
+            if ((parentId === 'root' || parentId === '') && Array.isArray(content.content)) {
+              // This is the slide root
+              const updatedContent = [...(content.content as ContentItem[])];
+              updatedContent.splice(index, 0, {
+                ...item,
+                id: item.id || v4(),
+              });
+              return {
+                ...content,
+                content: updatedContent.filter(
+                  (c): c is ContentItem => typeof c === 'object' && c !== null && 'id' in c
+                ),
+              };
+            }
+
             // If this is the container where we insert the new component
             if (content.id === parentId && Array.isArray(content.content)) {
               const updatedContent = [...content.content];
@@ -182,6 +205,21 @@ export const useSlideStore = create<SlideState>()(
 
           const updatedSlides = state.slides.map((slide) => {
             if (slide.id !== slideId) return slide;
+
+            // If inserting at root level (parentId is 'root' or empty)
+            if (parentId === 'root' || parentId === '') {
+              const currentContent = slide.content;
+              const contentArray = Array.isArray(currentContent) ? currentContent : [];
+              const updatedContent = [...contentArray];
+              updatedContent.splice(index, 0, {
+                ...item,
+                id: item.id || v4(),
+              });
+              return {
+                ...slide,
+                content: updatedContent,
+              };
+            }
 
             return {
               ...slide,

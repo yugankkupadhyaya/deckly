@@ -14,6 +14,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import Navbar from './_components/Navbar/Navbar';
 import { persist } from 'zustand/middleware';
 import LayoutPreview from './_components/editor-sidebar/leftSidebar/LayoutPreview';
+import ComponentsPanel from './_components/editor-sidebar/rightSidebar/ComponentsPanel';
 import Editor from './_components/editor/Editor';
 
 const Page = () => {
@@ -80,7 +81,7 @@ const Page = () => {
     <DndProvider backend={HTML5Backend}>
       <Navbar presentationId={params.presentationId as string} theme={currentTheme}></Navbar>
       <div
-        className="flex-1 flex over pt-16"
+        className="flex-1 flex pt-16 min-h-screen"
         style={{
           color: currentTheme.fontColor,
           fontFamily: currentTheme.fontFamily,
@@ -89,9 +90,11 @@ const Page = () => {
       >
         <LayoutPreview />
 
-        <div className="flex-1 pr-16 ml-64">
+        <div className="flex-1 pl-72 pr-64">
           <Editor isEditable={true} />
         </div>
+
+        <ComponentsPanel />
       </div>
     </DndProvider>
   );
