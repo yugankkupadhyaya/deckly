@@ -16,7 +16,7 @@ const createHeading = (displayName: string, defaultClassName: string) => {
     ({ children, styles, className, isPreview = false, isEditable = true, ...props }, ref) => {
       const textAreaRef = useRef<HTMLTextAreaElement>(null);
       const { currentTheme, isEditing: globalIsEditing } = useSlideStore();
-      
+
       const isEditableFinal = isEditable && globalIsEditing;
 
       useEffect(() => {
@@ -24,7 +24,7 @@ const createHeading = (displayName: string, defaultClassName: string) => {
 
         if (textarea && !isPreview) {
           const adjustHeight = () => {
-            textarea.style.height = '0';
+            textarea.style.height = 'auto';
             textarea.style.height = `${textarea.scrollHeight}px`;
           };
 
@@ -36,7 +36,10 @@ const createHeading = (displayName: string, defaultClassName: string) => {
       }, [isPreview, children]);
 
       const previewClassName = isPreview ? 'text-xs' : '';
-      const editableClassName = !isPreview && isEditableFinal ? 'focus:bg-blue-50 dark:focus:bg-blue-950/30 focus:ring-2 focus:ring-blue-500/50 rounded-md transition-all cursor-text' : '';
+      const editableClassName =
+        !isPreview && isEditableFinal
+          ? 'focus:bg-blue-50 dark:focus:bg-blue-950/30 focus:ring-2 focus:ring-blue-500/50 rounded-md transition-all cursor-text'
+          : '';
 
       return (
         <textarea
@@ -63,7 +66,7 @@ const createHeading = (displayName: string, defaultClassName: string) => {
             margin: 0,
             color: currentTheme.fontColor,
             fontFamily: currentTheme.fontFamily,
-            boxSizing: 'content-box',
+            boxSizing: 'border-box',
             lineHeight: '1.2em',
             minHeight: '1.2em',
             ...styles,
