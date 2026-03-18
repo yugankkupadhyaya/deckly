@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { cn } from '../../../../lib/utils';
 import { useSlideStore } from '../../../../store/useSlideStore';
+import { useAutoResizeTextarea } from '../../../../hooks/use-auto-resize-textarea';
 
 interface ParagraphProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   className?: string;
@@ -11,31 +12,31 @@ interface ParagraphProps extends React.TextareaHTMLAttributes<HTMLTextAreaElemen
   isEditable?: boolean;
 }
 
+const baseEditableStyles = {
+  width: '100%',
+  background: 'transparent',
+  resize: 'none' as const,
+  overflow: 'hidden',
+  outline: 'none',
+  boxSizing: 'border-box' as const,
+  lineHeight: '1.2em',
+  minHeight: '1.2em',
+};
+
 const Paragraph = React.forwardRef<HTMLTextAreaElement, ParagraphProps>(
-  ({ children, styles, className, isPreview = false, isEditable = true, ...props }, ref) => {
+  ({ value, styles, className, isPreview = false, isEditable = true, ...props }, ref) => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const { currentTheme, isEditing: globalIsEditing } = useSlideStore();
-    
+
     const isEditableFinal = isEditable && globalIsEditing;
+    const shouldAutoResize = !isPreview && isEditableFinal;
 
-    useEffect(() => {
-      const textarea = textAreaRef.current;
+    useAutoResizeTextarea(textAreaRef, typeof value === 'string' ? value : String(value ?? ''), shouldAutoResize);
 
-      if (textarea && !isPreview) {
-        const adjustHeight = () => {
-          textarea.style.height = '0';
-          textarea.style.height = `${textarea.scrollHeight}px`;
-        };
-
-        textarea.addEventListener('input', adjustHeight);
-        adjustHeight();
-
-        return () => textarea.removeEventListener('input', adjustHeight);
-      }
-    }, [isPreview, children]);
-
-    const previewClassName = isPreview ? 'text-xs' : '';
-    const editableClassName = !isPreview && isEditableFinal ? 'focus:bg-blue-50 dark:focus:bg-blue-950/30 focus:ring-2 focus:ring-blue-500/50 rounded-md transition-all cursor-text' : '';
+    const editableClassName =
+      !isPreview && isEditableFinal
+        ? 'focus:bg-blue-50 dark:focus:bg-blue-950/30 focus:ring-2 focus:ring-blue-500/50 rounded-md transition-all cursor-text'
+        : '';
 
     return (
       <textarea
@@ -49,27 +50,22 @@ const Paragraph = React.forwardRef<HTMLTextAreaElement, ParagraphProps>(
             (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = el;
           }
         }}
-        readOnly={isPreview || !isEditableFinal}
+        value={value}
+        readOnly={!shouldAutoResize}
         className={cn(
-          'w-full bg-transparent font-normal placeholder:text-gray-300 dark:placeholder:text-gray-600 focus:outline-none resize-none overflow-hidden leading-tight',
-          'text-lg',
-          previewClassName,
+          'font-normal placeholder:text-gray-300 dark:placeholder:text-gray-600 leading-tight text-lg',
           editableClassName,
           className
         )}
         style={{
-          padding: !isPreview && isEditableFinal ? '4px 8px' : 0,
+          ...baseEditableStyles,
+          padding: shouldAutoResize ? '4px 8px' : 0,
           margin: 0,
           color: currentTheme.fontColor,
           fontFamily: currentTheme.fontFamily,
-          boxSizing: 'content-box',
-          lineHeight: '1.2em',
-          minHeight: '1.2em',
           ...styles,
         }}
-      >
-        {children}
-      </textarea>
+      />
     );
   }
 );

@@ -25,32 +25,33 @@ const CustomImage = ({
   onContentChange,
   isEditable,
 }: Props) => {
-  const [imgSrc, setImgSrc] = useState<string>('');
+  // const [imgSrc, setImgSrc] = useState<string>('');
   const [hasError, setHasError] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
+  // const [isInitialized, setIsInitialized] = useState(false);
 
-  useEffect(() => {
-    if (!isInitialized) {
-      if (src && src.length > 0) {
-        setImgSrc(src);
-      } else {
-        setImgSrc(getRandomImage());
-      }
-      setIsInitialized(true);
-    }
-  }, [src, isInitialized]);
+  // useEffect(() => {
+  //   if (!isInitialized) {
+  //     if (src && src.length > 0) {
+  //       setImgSrc(src);
+  //     } else {
+  //       setImgSrc(getRandomImage());
+  //     }
+  //     setIsInitialized(true);
+  //   }
+  // }, [src, isInitialized]);
 
   const handleError = () => {
     if (!hasError) {
       setHasError(true);
-      setImgSrc(getRandomImage());
+      // setImgSrc(getRandomImage());
     }
   };
-
+  const fallbackRef = React.useRef<string>(getRandomImage());
+  const displaySrc = hasError ? fallbackRef.current : src || fallbackRef.current;
   return (
     <div className="relative group w-full h-full rounded-lg overflow-hidden">
       <Image
-        src={hasError ? getRandomImage() : imgSrc}
+        src={hasError ? getRandomImage() : displaySrc}
         width={isPreview ? 48 : 800}
         height={isPreview ? 48 : 800}
         alt={alt || 'image'}

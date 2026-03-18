@@ -237,7 +237,7 @@ export const ContentRenderer: React.FC<ContentRendererProps> = ({
             {content.content.length > 0 ? (
               (content.content as ContentItem[]).map((subitem: ContentItem, subIndex: number) => {
                 return (
-                  <React.Fragment key={subitem.id || subIndex}>
+                  <React.Fragment key={subitem.id}>
                     {!isPreview && !subitem.restrictToDrop && subIndex === 0 && isEditable && (
                       <Dropper index={0} parentId={content.id} slideId={slideId} />
                     )}
@@ -286,19 +286,19 @@ export const MasterRecursiveComponent: React.FC<MasterRecursiveComponentProps> =
         {!isPreview && isEditable && content.length === 0 && (
           <Dropper index={0} parentId="" slideId={slideId} />
         )}
-        {content.map((item, i) => (
-          <React.Fragment key={item.id || i}>
-            {!isPreview && isEditable && <Dropper index={i} parentId="" slideId={slideId} />}
-            <MasterRecursiveComponent
-              content={item}
-              onContentChange={onContentChange}
-              slideId={slideId}
-              isEditable={isEditable}
-              isPreview={isPreview}
-              index={i}
-            />
-          </React.Fragment>
-        ))}
+          {content.map((item, i) => (
+            <React.Fragment key={item.id}>
+              {!isPreview && isEditable && <Dropper index={i} parentId="" slideId={slideId} />}
+              <MasterRecursiveComponent
+                content={item}
+                onContentChange={onContentChange}
+                slideId={slideId}
+                isEditable={isEditable}
+                isPreview={isPreview}
+                index={i}
+              />
+            </React.Fragment>
+          ))}
         {!isPreview && isEditable && content.length > 0 && (
           <Dropper index={content.length} parentId="" slideId={slideId} />
         )}
