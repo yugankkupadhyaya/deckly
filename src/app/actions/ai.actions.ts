@@ -4,7 +4,7 @@ import OpenAI from 'openai';
 import { v4 as uuidv4 } from 'uuid';
 import { currentUser } from '@clerk/nextjs/server';
 import { client } from '../../lib/prisma';
-import { ContentItem, ContentType, Slide } from '../../lib/types';
+import { ContentItem, ContentType, Slide, Theme } from '../../lib/types';
 
 /* ===============================
    OPENAI CLIENT (Single Instance)
@@ -1029,7 +1029,7 @@ const replaceImagePlaceholders = async (layout: Slide) => {
    GENERATE LAYOUTS JSON
 ================================= */
 
-export const generateLayoutsJson = async (outlineArray: string[]) => {
+export const generateLayoutsJson = async (outlineArray: string[], theme: Theme) => {
   const prompt = `You are a highly creative AI that generates
 JSON-based layouts for presentations. I will
 provide you with an array of outlines, and for
@@ -1060,6 +1060,45 @@ unique designs based on the provided outline.
    - heading + paragraph + list
 8. Ensure proper formatting and schema alignment
    for the output JSON.
+### Content Writing Rules (VERY IMPORTANT):
+
+- Each slide MUST include meaningful content, not just headings.
+- For every heading, include a short explanatory paragraph (2–3 lines).
+- Use bullet points ONLY to support the explanation, not replace it.
+- Avoid empty or generic content like "Introduction", "Overview".
+- Add real, informative, engaging text based on the topic.
+- Make slides feel like a real presentation, not an outline.
+
+### Structure per slide:
+
+Each slide should ideally include:
+1. A clear heading
+2. A short paragraph explaining the topic
+3. Supporting bullet points (if applicable)
+
+### Example:
+
+Heading: "Shah Rukh Khan’s Rise to Fame"
+
+Paragraph:
+"Shah Rukh Khan began his career in television before transitioning to Bollywood, where his unique acting style and charisma quickly set him apart from other actors."
+
+Bullet Points:
+- Started with TV shows like Fauji
+- Breakthrough with Baazigar and Darr
+- Became known as the "King of Romance"
+### Theme Configuration:
+- Theme Name: ${theme.name}
+- Accent Color: ${theme.accentColor}
+- Background Color: ${theme.backgroundColor}
+- Sidebar Color: ${theme.sidebarColor}
+
+### Design Instructions:
+- Use accent color for headings and highlights
+- Ensure background color consistency
+- Maintain visual hierarchy using theme colors
+- Create clean, modern, professional UI
+
 
 ### Available Content Types:
 - title, heading1, heading2, heading3, heading4
@@ -1132,7 +1171,7 @@ Return EXACTLY this format:
    MAIN CONTROLLER
 ================================= */
 
-export const generateLayouts = async (projectId: string, theme: string) => {
+export const generateLayouts = async (projectId: string, theme: Theme) => {
   try {
     if (!projectId) {
       return { status: 400, error: 'Project Id is required' };
@@ -1152,7 +1191,7 @@ export const generateLayouts = async (projectId: string, theme: string) => {
       return { status: 400, error: 'Project does not have any outlines' };
     }
 
-    const layouts = await generateLayoutsJson(project.outlines);
+    const layouts = await generateLayoutsJson(project.outlines, theme);
 
     if (layouts.status !== 200) {
       return layouts;
@@ -1160,7 +1199,7 @@ export const generateLayouts = async (projectId: string, theme: string) => {
 
     await client.project.update({
       where: { id: projectId },
-      data: { slides: layouts.data, themeName: theme },
+      data: { slides: layouts.data, themeName: theme.name },
     });
 
     return { status: 200, data: layouts.data };

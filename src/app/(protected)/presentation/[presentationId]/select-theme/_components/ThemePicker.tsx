@@ -19,7 +19,7 @@ const ThemePicker = ({ selectedTheme, onSelectTheme, themes }: Props) => {
   const params = useParams();
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
-  const { project, setSlides, currentTheme } = useSlideStore();
+  const { project, setSlides, currentTheme, setCurrentTheme } = useSlideStore();
   const handleGenerateLayouts = async () => {
     setLoading(true);
     if (!selectedTheme) {
@@ -33,7 +33,7 @@ const ThemePicker = ({ selectedTheme, onSelectTheme, themes }: Props) => {
     }
 
     try {
-      const res = await generateLayouts(params.presentationId as string, currentTheme.name);
+      const res = await generateLayouts(params.presentationId as string, selectedTheme);
 
       if (res.status != 200 && !res.data) {
         throw new Error('Error generating layouts');
@@ -94,7 +94,10 @@ const ThemePicker = ({ selectedTheme, onSelectTheme, themes }: Props) => {
           {themes.map((theme) => (
             <motion.div key={theme.name} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button
-                onClick={() => onSelectTheme(theme)}
+                onClick={() => {
+                  onSelectTheme(theme);
+                  setCurrentTheme(theme);
+                }}
                 className="flex flex-col items-center justify-start p6 w-full h-auto"
               >
                 <div className="w-full flex items-center justify-between">
