@@ -14,8 +14,9 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import Navbar from './_components/Navbar/Navbar';
 import { persist } from 'zustand/middleware';
 import LayoutPreview from './_components/editor-sidebar/leftSidebar/LayoutPreview';
-import ComponentsPanel from './_components/editor-sidebar/rightSidebar/ComponentsPanel';
+import ComponentsPanel from './_components/editor-sidebar/rightSidebar/tabs/ComponentsPanel';
 import Editor from './_components/editor/Editor';
+import EditorRightSideBar from './_components/editor-sidebar/rightSidebar/index';
 
 const Page = () => {
   const router = useRouter();
@@ -94,7 +95,8 @@ const Page = () => {
           <Editor isEditable={true} />
         </div>
 
-        <ComponentsPanel />
+        {/* <EditorRightSideBar /> */}
+        <EditorRightSideBar />
       </div>
     </DndProvider>
   );
