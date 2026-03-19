@@ -190,7 +190,7 @@ const ThemePreview = (props: Props) => {
       </div>
 
       {/* ---------------- SIDEBAR (SCROLLS) ---------------- */}
-      {/* <ThemePicker selectedTheme={selectedTheme} themes={themes} onSelectTheme={setSelectedTheme} /> */}
+      <ThemePicker selectedTheme={selectedTheme} themes={themes} onSelectTheme={setSelectedTheme} />
     </div>
   );
 };
