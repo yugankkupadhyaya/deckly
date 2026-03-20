@@ -147,3 +147,6 @@
 /* .text-secondary {
   color: red !important;
 } */
+.bg-cool-gradient {
+ @apply bg-gradient-to-r from-red-500 via-orange-500 to-yellow-400;
+}

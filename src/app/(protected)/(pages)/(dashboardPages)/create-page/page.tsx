@@ -12,9 +12,9 @@ const Page = async (props: Props) => {
   if (!checkUser.user) {
     redirect('/sign-in');
   }
-  // if (!checkUser.user.subscription) {
-  //   redirect('/dashboard');
-  // }
+  if (!checkUser.user.subscription) {
+    redirect('/dashboard');
+  }
   return (
     <div>
       <main className="w-full h-full pt-6">
