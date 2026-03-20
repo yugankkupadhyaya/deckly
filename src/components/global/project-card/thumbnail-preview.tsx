@@ -1,26 +1,30 @@
 import { Image } from 'lucide-react';
 import { cn } from '../../../lib/utils';
 import { Slide, Theme } from './../../../lib/types';
+import { MasterRecursiveComponent } from '../../../app/(protected)/presentation/[presentationId]/_components/editor/MasterRecursiveComponent';
 
-type Props = { slide?: Slide; theme: Theme };
+type Props = { slide: Slide; theme: Theme };
 
 const ThumbnailPreview = ({ slide, theme }: Props) => {
   return (
     <div
-      className={cn(
-        'w-full h-full relative rounded-lg overflow-hidden transition-all duration-200'
-      )}
+      className={cn('w-full relative rounded-lg overflow-hidden ')}
       style={{
         fontFamily: theme.fontFamily,
         color: theme.accentColor,
-        backgroundColor: theme.slideBackgroundColor,
-        backgroundImage: theme.gradientBackground,
+        background: theme.gradientBackground || theme.slideBackgroundColor,
       }}
     >
       {slide ? (
-        <div className="scale-[0.5] origin-top-left w-[200%] overflow-hidden">
-          {/* wip:add a preview of slides   */}
-          this is a slide{' '}
+        <div className="scale-[0.5] origin-top-left w-[200%] h-[200%] overflow-hidden">
+          <div className="w-full h-full flex items-start justify-start">
+            <MasterRecursiveComponent
+              slideId={slide.id}
+              content={slide.content}
+              onContentChange={() => {}}
+              isPreview={true}
+            />
+          </div>
         </div>
       ) : (
         <div className="w-full h-full bg-muted/30 flex items-center justify-center">

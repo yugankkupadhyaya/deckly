@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useSlideStore } from '@/store/useSlideStore';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DraggableSlidePreview } from './DraggableSlidePreview';
 
 const LayoutPreview = () => {
-  const { getOrderedSlides, reOrderSlides, isEditing } = useSlideStore();
-  const slides = getOrderedSlides();
+  const { reOrderSlides, isEditing } = useSlideStore();
+  const slides = useSlideStore((state) => state.slides);
+  const sortedSlides = useMemo(() => 
+    [...slides].sort((a, b) => a.slideOrder - b.slideOrder),
+    [slides]
+  );
   const [loading, setLoading] = useState(true);
 
   const moveSlide = (dragIndex: number, hoverIndex: number) => {
@@ -33,11 +37,11 @@ const LayoutPreview = () => {
             <div className="flex items-center justify-between px-2 py-1.5">
               <h2 className="text-sm font-semibold dark:text-zinc-100 text-zinc-700">Slides</h2>
               <span className="text-xs px-2 py-0.5 rounded-full bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 text-zinc-600" suppressHydrationWarning>
-                {slides?.length}
+                {sortedSlides?.length}
               </span>
             </div>
             <div className="space-y-3">
-              {slides.map((slide, index) => (
+              {sortedSlides.map((slide, index) => (
                 <DraggableSlidePreview
                   key={slide.id || index}
                   slide={slide}
@@ -46,7 +50,7 @@ const LayoutPreview = () => {
                 />
               ))}
             </div>
-            {slides.length === 0 && (
+            {sortedSlides.length === 0 && (
               <div className="text-center py-8 text-sm text-zinc-500 dark:text-zinc-400">
                 {isEditing ? "No slides yet. Drag layouts here to get started." : "Enable Edit Mode to add slides"}
               </div>

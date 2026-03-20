@@ -5,16 +5,15 @@ import { SidebarInset, SidebarProvider } from '../../../components/ui/sidebar';
 import AppSidebar from '../../../components/global/app-sidebar';
 import { getRecentProjects } from '../../actions/project';
 import UpperInfoBar from '../../../components/global/upper-info-bar';
-
+import { cookies } from 'next/headers';
 type Props = { children: React.ReactNode };
 
 const layout = async ({ children }: Props) => {
-  console.log('DASHBOARD LAYOUT RENDERED');
-
   const checkUser = await onAuthenticateUser();
   if (!checkUser.user) redirect('/sign-in');
 
   const recentProjects = await getRecentProjects();
+  const theme = (await cookies()).get('theme')?.value || 'light';
   return (
     <SidebarProvider>
       <div className="flex min-h-screen">

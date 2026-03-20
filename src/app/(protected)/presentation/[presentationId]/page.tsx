@@ -17,13 +17,14 @@ import LayoutPreview from './_components/editor-sidebar/leftSidebar/LayoutPrevie
 import ComponentsPanel from './_components/editor-sidebar/rightSidebar/tabs/ComponentsPanel';
 import Editor from './_components/editor/Editor';
 import EditorRightSideBar from './_components/editor-sidebar/rightSidebar/index';
+import PresentationMode from './_components/Navbar/PresentationMode';
 
 const Page = () => {
   const router = useRouter();
   const params = useParams();
   const { setTheme } = useTheme();
   const [isLoading, setIsLoading] = useState(true);
-
+  const [mode, setMode] = useState<'edit' | 'present'>('edit');
   const {
     setCurrentTheme,
     setSlides,
@@ -80,24 +81,33 @@ const Page = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <Navbar presentationId={params.presentationId as string} theme={currentTheme}></Navbar>
-      <div
-        className="flex-1 flex pt-16 min-h-screen"
-        style={{
-          color: currentTheme.fontColor,
-          fontFamily: currentTheme.fontFamily,
-          backgroundColor: currentTheme.backgroundColor,
-        }}
-      >
-        <LayoutPreview />
+      <Navbar
+        mode={mode}
+        setMode={setMode}
+        presentationId={params.presentationId as string}
+        theme={currentTheme}
+      ></Navbar>
 
-        <div className="flex-1 pl-72 pr-64">
-          <Editor isEditable={true} />
+      {mode == 'edit' && (
+        <div
+          className="flex-1 flex pt-16 min-h-screen"
+          style={{
+            color: currentTheme.fontColor,
+            fontFamily: currentTheme.fontFamily,
+            backgroundColor: currentTheme.backgroundColor,
+          }}
+        >
+          <LayoutPreview />
+
+          <div className="flex-1 pl-72 pr-64">
+            <Editor isEditable={true} />
+          </div>
+
+          {/* <EditorRightSideBar /> */}
+          <EditorRightSideBar />
         </div>
-
-        {/* <EditorRightSideBar /> */}
-        <EditorRightSideBar />
-      </div>
+      )}
+      {mode == 'present' && <PresentationMode onClose={() => setMode('edit')} />}
     </DndProvider>
   );
 };

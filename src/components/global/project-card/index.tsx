@@ -120,12 +120,12 @@ const ProjectCard = ({
           relative aspect-16/10 overflow-hidden rounded-xl cursor-pointer
           border border-border/60 bg-muted
           flex items-center justify-center
-          transition-colors group-hover:border-border
+          transition-colors group-hover:border-border cursor-pointer
         "
         onClick={handleNavigate}
       >
         {theme ? (
-          <ThumbnailPreview theme={theme} />
+          <ThumbnailPreview slide={JSON.parse(JSON.stringify(slideData))[0]} theme={theme} />
         ) : (
           <div className="w-full h-full bg-muted flex items-center justify-center">
             <Image className="w-8 h-8 text-muted-foreground" />
