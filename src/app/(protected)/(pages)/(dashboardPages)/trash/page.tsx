@@ -1,24 +1,33 @@
-import React from 'react'
+import NotFound from '../../../../../components/global/not-found';
+import Projects from '../../../../../components/global/projects';
+import { getDeletedProjects } from '../../../../actions/project';
 import DeleteAllButton from './_components/DeleteAllButton';
 
-type Props = {}
+const page = async () => {
+  const deletedProjects = await getDeletedProjects();
 
-const page = (props: Props) => {
+  if (!deletedProjects || deletedProjects.status !== 200) {
+    return <NotFound />;
+  }
+
+  const projects = deletedProjects.data ?? [];
+
   return (
-    <div className="flex flex-col gap-6 relative">
+    <div className="flex flex-col gap-6">
+      {/* Header */}
       <div className="flex justify-between items-center">
         <div className="flex flex-col items-start">
-          <h1 className="text-2xl font-semibold dark:text-primary">Trash</h1>
-
-          <p className="text-base font-normal dark:text-secondary">
-            All your deleted presentations
-          </p>
+          <h1 className="text-2xl font-semibold">Trash</h1>
+          <p className="text-base text-muted-foreground">All your deleted presentations</p>
         </div>
 
-        <DeleteAllButton />
+        <DeleteAllButton projects={projects} />
       </div>
+
+      {/* Content */}
+      {projects.length > 0 ? <Projects projects={projects} /> : <NotFound />}
     </div>
   );
-}
+};
 
-export default page
+export default page;
