@@ -14,7 +14,7 @@ const EditorRightSideBar = (props: Props) => {
   return (
     <div className="fixed">
       <RightSidebarPopover />
-      
+      <ComponentsPanel />
     </div>
   );
 };

@@ -1,14 +1,14 @@
 import axios from 'axios';
 
-export const lemonSqueezyClient = (lemonSqueezyApiKey?: string) => {
+const LEMON_SQUEEZY_BASE_URL = 'https://api.lemonsqueezy.com/v1';
+
+export const createLemonSqueezyClient = (apiKey: string) => {
   return axios.create({
-    baseURL: process.env.NEXT_PUBLIC_LEMON_SQUEEZY_API,
+    baseURL: LEMON_SQUEEZY_BASE_URL,
     headers: {
       Accept: 'application/vnd.api+json',
       'Content-Type': 'application/vnd.api+json',
-      Authorization: `Bearer ${
-        lemonSqueezyApiKey ? lemonSqueezyApiKey : process.env.LEMON_SQUEEZY_API_KEY
-      }`,
+      Authorization: `Bearer ${apiKey}`,
     },
   });
 };

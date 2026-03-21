@@ -10,17 +10,20 @@ import { useRouter } from 'next/navigation';
 import { buySubscription } from '../../../app/actions/lemonSqueezy';
 import { ErrorBoundary } from 'next/dist/client/components/error-boundary';
 import { showErrorToast } from '../../../lib/toast';
+import PaymentsDown from '../../../app/(protected)/(pages)/(dashboardPages)/payment/page';
 
 const NavFooter = ({ prismaUser }: { prismaUser: User }) => {
+  const [loading, setLoading] = useState(false);
   const { user, isLoaded, isSignedIn } = useUser();
-    if (!isLoaded || !user) return null;
-  const [loading, setLoading] = useState(false);const router = useRouter();
+  const router = useRouter();
+  if (!isLoaded || !user) return null;
 
   const handleUpgrading = async () => {
     setLoading(true);
     try {
       const res = await buySubscription(prismaUser.id);
-      if (res.status != 200) throw new Error('Failed to upgrade subscription');
+      console.log('🔥 Lemon response:', JSON.stringify(res.url, null, 2));
+      if (!res.success) throw new Error('Failed to upgrade subscription');
     } catch (error) {
       showErrorToast('Failed to upgrade subscription .Please try again');
     } finally {
@@ -58,7 +61,9 @@ const NavFooter = ({ prismaUser }: { prismaUser: User }) => {
       
       active:scale-[0.97]
     "
-                  onClick={handleUpgrading}
+                  onClick={() => {
+                    router.push('/payment');
+                  }}
                 >
                   {loading ? 'Upgrading...' : 'Upgrade'}
                 </Button>

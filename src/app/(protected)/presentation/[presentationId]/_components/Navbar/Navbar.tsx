@@ -37,7 +37,7 @@ const Navbar = ({ presentationId, theme, setMode, mode }: Props) => {
       <div className="flex items-center gap-3">
         <Link href={'/dashboard'} passHref>
           <Button
-            variant={'ghost'}
+            variant={'default'}
             size="sm"
             className="flex items-center gap-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10"
           >
