@@ -34,8 +34,6 @@ import { v4 } from 'uuid';
 import { showErrorToast, showSuccessToast } from '../../../../../../../lib/toast';
 import { createProject } from '../../../../../../actions/project';
 import { useSlideStore } from '../../../../../../../store/useSlideStore';
-import { title } from 'process';
-import { Project } from '@prisma/client';
 
 type Props = {
   onBack: () => void;
