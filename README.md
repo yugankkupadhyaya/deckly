@@ -1,76 +1,81 @@
-# Deckly
+# 🎴 Deckly
 
-AI-powered presentation builder that transforms your ideas into beautiful, well-structured slides in minutes.
+**Deckly** is a cutting-edge, AI-powered presentation ecosystem. It empowers creators to bridge the gap between complex ideas and visual excellence. Whether you're generating a full deck from a single prompt, building from scratch, or leveraging a community-driven marketplace, Deckly is built for speed and aesthetic precision.
 
-## Features
+---
 
-- **AI-Powered Generation** - Create presentations from prompts using OpenAI or Groq
-- **Drag & Drop Editor** - Intuitive slide editor with drag-and-drop reordering
-- **Rich Components** - Headings, paragraphs, images, tables, lists, and columns
-- **Theme System** - Multiple built-in themes with light/dark variants
-- **Project Management** - Create, edit, delete, and organize presentations
-- **Authentication** - Secure user accounts via Clerk
-- **Real-time Preview** - Live preview of your slides as you edit
+## 🚀 Key Features
 
-## Tech Stack
+* **🪄 AI Presentation Engine:** Leverage **OpenRouter** to transform prompts into structured, professional slide decks instantly.
+* **🛒 Template Marketplace:** A native ecosystem to browse, buy, and sell high-fidelity presentation templates.
+* **🎨 Dynamic Theme Engine:** Seamlessly toggle between curated professional themes to match your brand identity.
+* **⚡ High-Performance Assets:** Instant image processing and lightning-fast delivery powered by **Uploadcare**.
+* **🛡️ Enterprise Security:** Robust user authentication and session management via **Clerk**.
+* **🌓 Minimalist UI:** A distraction-free, modern dark-mode interface designed for deep work.
 
-- **Framework**: Next.js 16 with React 19
-- **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: Clerk
-- **Styling**: Tailwind CSS with Radix UI components
-- **Animations**: Framer Motion
-- **State Management**: Zustand
-- **AI**: OpenAI & Groq SDK
-- **Image Upload**: Uploadcare
+---
 
-## Getting Started
+## 🛠️ Tech Stack
 
-1. Clone the repository:
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend** | [Next.js 15 (App Router)](https://nextjs.org/) |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/) |
+| **Database** | [PostgreSQL](https://www.postgresql.org/) via [Neon](https://neon.tech/) |
+| **ORM** | [Prisma](https://www.prisma.io/) |
+| **Auth** | [Clerk](https://clerk.com/) |
+| **AI Integration** | [OpenRouter](https://openrouter.ai/) |
+| **Storage** | [Uploadcare](https://uploadcare.com/) |
+
+---
+
+## 🚦 Getting Started
+
+### 1. Clone the Repository
 ```bash
-git clone <repo-url>
-```
+git clone [https://github.com/yugankkkupadhyaya/deckly.git](https://github.com/yugankkkupadhyaya/deckly.git)
+cd deckly
 
-2. Install dependencies:
-```bash
-pnpm install
-```
 
-3. Set up environment variables:
-```bash
-cp .env.example .env.local
-# Configure your database, Clerk, and AI API keys
-```
+2. Install Dependencies
+npm install
 
-4. Set up the database:
-```bash
+
+3. Environment Configuration
+
+Create a .env file in the root directory:
+
+# App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# Database (Neon)
+DATABASE_URL="your_neon_postgres_url"
+
+# Clerk Auth
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_key
+CLERK_SECRET_KEY=your_secret
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+
+# Uploadcare
+NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY=your_key
+UPLOADCARE_SECRET_KEY=your_secret_key
+
+# OpenRouter AI
+OPEN_ROUTER_API_KEY=your_key
+
+
+4. Database Initialization
 npx prisma generate
 npx prisma db push
-```
+5. Run Development Server
+npm run dev
+👨‍💻 Author
 
-5. Run the development server:
-```bash
-pnpm dev
-```
+Yugank Upadhyaya
+Full Stack Developer & AI Enthusiast
+📍 Ghaziabad, Uttar Pradesh, India
 
-Open [http://localhost:3000](http://localhost:3000) to view the app.
+📧 yugankkupadhyaya@gmail.com
 
-## Available Scripts
 
-- `pnpm dev` - Start development server
-- `pnpm build` - Build for production
-- `pnpm start` - Start production server
-- `pnpm lint` - Run ESLint
-- `pnpm test` - Run tests
-- `pnpm test:watch` - Run tests in watch mode
-
-## Project Structure
-
-- `src/app` - Next.js App Router pages and API routes
-- `src/components` - Reusable UI components
-- `src/store` - Zustand state management
-- `src/lib` - Utilities, types, and constants
-- `prisma` - Database schema and migrations
-
-## License
-
-MIT

@@ -232,3 +232,38 @@ export const getDeletedProjects = async () => {
     return { status: 500, error: 'Failed to fetch deleted projects' };
   }
 };
+
+export const updateProject = async ({
+  projectId,
+  slides,
+  themeName,
+}: {
+  projectId: string;
+  slides: any;
+  themeName: string;
+}) => {
+  try {
+    const checkUser = await onAuthenticateUser();
+
+    if (checkUser.status !== 200 || !checkUser.user) {
+      return { status: 403, error: 'User not authenticated' };
+    }
+
+    const updatedProject = await client.project.update({
+      where: {
+        id: projectId,
+        userId: checkUser.user.id,
+      },
+      data: {
+        slides,
+        themeName,
+        updatedAt: new Date(),
+      },
+    });
+
+    return { status: 200, data: updatedProject };
+  } catch (error) {
+    console.error('❌ Update Project Error:', error);
+    return { status: 500, error: 'Failed to update project' };
+  }
+};

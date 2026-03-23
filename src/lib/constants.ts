@@ -1,5 +1,5 @@
 import { Variants } from 'framer-motion';
-import { Home, LayoutTemplateIcon, Settings, Trash } from 'lucide-react';
+import { Home, Info, LayoutTemplateIcon, MessageSquare, Settings, Trash } from 'lucide-react';
 import { Theme } from './types';
 
 interface NavItem {
@@ -41,6 +41,16 @@ export const data: {
       title: 'Settings',
       url: '/settings',
       icon: Settings,
+    },
+    {
+      title: 'About',
+      url: '/about',
+      icon: Info,
+    },
+    {
+      title: 'Contact',
+      url: '/contact',
+      icon: MessageSquare,
     },
   ],
 };
