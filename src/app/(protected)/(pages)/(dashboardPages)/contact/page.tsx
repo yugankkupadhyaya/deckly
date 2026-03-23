@@ -11,7 +11,7 @@ export const ContactUs = () => {
       name: 'GitHub',
       value: 'yugankkkupadhyaya',
       icon: <Github className="w-4 h-4" />,
-      href: 'https://github.com/yugankkkupadhyaya',
+      href: 'https://github.com/yugankkupadhyaya',
     },
     {
       name: 'Email',

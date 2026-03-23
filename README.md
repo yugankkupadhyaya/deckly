@@ -1,81 +1,64 @@
 # 🎴 Deckly
 
-**Deckly** is a cutting-edge, AI-powered presentation ecosystem. It empowers creators to bridge the gap between complex ideas and visual excellence. Whether you're generating a full deck from a single prompt, building from scratch, or leveraging a community-driven marketplace, Deckly is built for speed and aesthetic precision.
+**Deckly** is a cutting-edge, AI-powered presentation ecosystem. It empowers creators to bridge the gap between complex ideas and visual excellence.
 
 ---
 
 ## 🚀 Key Features
 
-* **🪄 AI Presentation Engine:** Leverage **OpenRouter** to transform prompts into structured, professional slide decks instantly.
-* **🛒 Template Marketplace:** A native ecosystem to browse, buy, and sell high-fidelity presentation templates.
-* **🎨 Dynamic Theme Engine:** Seamlessly toggle between curated professional themes to match your brand identity.
-* **⚡ High-Performance Assets:** Instant image processing and lightning-fast delivery powered by **Uploadcare**.
-* **🛡️ Enterprise Security:** Robust user authentication and session management via **Clerk**.
-* **🌓 Minimalist UI:** A distraction-free, modern dark-mode interface designed for deep work.
+- 🪄 **AI Presentation Engine** – Generate slides from prompts using OpenRouter  
+- 🛒 **Template Marketplace** – Buy & sell templates  
+- 🎨 **Dynamic Theme Engine** – Switch themes easily  
+- ⚡ **Uploadcare Storage** – Fast media handling  
+- 🛡️ **Clerk Auth** – Secure authentication  
+- 🌓 **Minimal UI** – Clean dark interface  
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-| :--- | :--- |
-| **Frontend** | [Next.js 15 (App Router)](https://nextjs.org/) |
-| **Styling** | [Tailwind CSS](https://tailwindcss.com/) |
-| **Database** | [PostgreSQL](https://www.postgresql.org/) via [Neon](https://neon.tech/) |
-| **ORM** | [Prisma](https://www.prisma.io/) |
-| **Auth** | [Clerk](https://clerk.com/) |
-| **AI Integration** | [OpenRouter](https://openrouter.ai/) |
-| **Storage** | [Uploadcare](https://uploadcare.com/) |
+| Layer     | Technology              |
+|----------|------------------------|
+| Frontend | Next.js 15             |
+| Styling  | Tailwind CSS           |
+| Database | PostgreSQL (Neon)      |
+| ORM      | Prisma                 |
+| Auth     | Clerk                  |
+| AI       | OpenRouter             |
+| Storage  | Uploadcare             |
 
 ---
 
 ## 🚦 Getting Started
 
-### 1. Clone the Repository
+### 1. Clone Repo
+
 ```bash
-git clone [https://github.com/yugankkkupadhyaya/deckly.git](https://github.com/yugankkkupadhyaya/deckly.git)
+git clone https://github.com/yugankkkupadhyaya/deckly.git
 cd deckly
-
-
-2. Install Dependencies
+2. Install
 npm install
+3. Setup Environment
 
+Create .env file:
 
-3. Environment Configuration
-
-Create a .env file in the root directory:
-
-# App
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 
-# Database (Neon)
-DATABASE_URL="your_neon_postgres_url"
+DATABASE_URL=""
 
-# Clerk Auth
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_key
-CLERK_SECRET_KEY=your_secret
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=""
+CLERK_SECRET_KEY=""
 
-# Uploadcare
-NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY=your_key
-UPLOADCARE_SECRET_KEY=your_secret_key
+NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY=""
+UPLOADCARE_SECRET_KEY=""
 
-# OpenRouter AI
-OPEN_ROUTER_API_KEY=your_key
-
-
-4. Database Initialization
+OPEN_ROUTER_API_KEY=""
+4. Setup DB
 npx prisma generate
 npx prisma db push
-5. Run Development Server
+5. Run App
 npm run dev
 👨‍💻 Author
 
 Yugank Upadhyaya
-Full Stack Developer & AI Enthusiast
-📍 Ghaziabad, Uttar Pradesh, India
-
-📧 yugankkupadhyaya@gmail.com
-
-
+📍 Ghaziabad, India
