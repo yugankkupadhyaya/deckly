@@ -31,7 +31,6 @@ const AppSidebar = ({ recentProjects, user, className, ...props }: AppSidebarPro
       className={cn('border-r border-border bg-background', className)}
       {...props}
     >
-     
       <SidebarHeader className="px-3 py-4">
         <SidebarMenuButton size="lg" className="gap-3">
           <Avatar className="h-10 w-10">
@@ -39,7 +38,6 @@ const AppSidebar = ({ recentProjects, user, className, ...props }: AppSidebarPro
             <AvatarFallback>Dl</AvatarFallback>
           </Avatar>
 
-          
           <span className="text-xl font-semibold group-data-[collapsible=icon]:hidden">Deckly</span>
         </SidebarMenuButton>
       </SidebarHeader>

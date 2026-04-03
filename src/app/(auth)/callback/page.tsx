@@ -7,9 +7,8 @@ export default async function AuthCallbackPage() {
   if (auth.status === 200 || auth.status === 201) {
     redirect('/dashboard');
   }
-
   if (auth.status === 403) {
-    redirect('/sign-in');
+    return null;
   }
 
   redirect('/error');

@@ -27,21 +27,13 @@ export const data: {
       url: '/dashboard',
       icon: Home,
     },
-    {
-      title: 'Templates',
-      url: '/templates',
-      icon: LayoutTemplateIcon,
-    },
+
     {
       title: 'Trash',
       url: '/trash',
       icon: Trash,
     },
-    {
-      title: 'Settings',
-      url: '/settings',
-      icon: Settings,
-    },
+
     {
       title: 'About',
       url: '/about',
